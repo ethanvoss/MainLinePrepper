@@ -1,0 +1,173 @@
+:root {
+	--background-color:#1c1c1c ;
+	--background-color-lite: #303030;
+	--background-color-super-lite: #3d3d3d;
+	--text-color: white;
+	--text-color-contrast: #303030;
+	--link-color-hover: #65c1cf;
+}
+
+body {
+    font-family: courier;
+    background: var(--background-color);
+    color: var(--text-color);    
+}
+
+button { 
+	display: block;
+	border: 1px solid var(--background-color-lite);
+	background-color: var(--background-color-lite);
+	color: var(--text-color);
+	border-radius: 4px;
+	font-size: 11px;
+	padding: 4px 4px;
+	transition-duration: 0.4s;
+}
+
+button:hover {
+	border: 1px solid var(--background-color-lite);
+	background-color: #fcfcfc;
+	color: var(--text-color-contrast);
+}
+
+
+h1, h2, h3, p {
+	font-weight: 1;
+}
+
+a {
+	color: var(--text-color);
+	text-decoration: none;
+	transition-duration: 0.4s;
+}
+
+a:hover {
+	color: var(--link-color-hover);
+	text-decoration: none;
+}
+
+
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e7e7e7;
+  background-color: var(--background-color-super-lite);
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  text-align: center;
+  padding: 10px 10px;
+  text-decoration: none;
+}
+li a.home {
+  color: white;
+  background-color: var(--link-color-hover);
+}
+
+#boardDiv {
+	width: 400px;
+	padding: 5px;
+	background-color: var(--background-color-lite);
+}
+
+#parent {
+	display: flex;
+}
+
+#AllLineDiv, #SideLineDiv {
+	border: 3px solid var(--background-color-super-lite);
+	padding: 5px;
+	padding-top: 0;
+	margin: 5px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	width: 400px;
+}
+
+#PopularDisplay {
+	border: 3px solid var(--background-color-super-lite);
+	padding: 5px;
+	padding-top: 0;
+	margin: 5px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	flex: 0.5;
+}
+#lineControlls {
+
+}
+
+#inputs {
+	border: 3px solid var(--background-color-super-lite);
+	padding: 5px;
+	padding-top: 0;
+	margin: 5px;
+	margin-left : 0px;
+	margin-right: 0px;
+	display: inline-block;
+}
+
+#LineSettings {
+	border: 3px solid var(--background-color-super-lite);
+	padding: 5px;
+	padding-top: 0;
+	margin: 5px;
+	margin-left : 0px;
+	margin-right: 0px;
+	display: inline-block;
+}
+
+#InputsTopRow, #InputsMiddleRow {
+	margin-top: 5px;
+	display: block;
+}
+#InputsTopRow > button, #InputsMiddleRow > button{
+	display: inline;
+}
+
+
+
+.popularMoveTitle {
+	display: inline-block;
+}
+
+.line {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  background-color: var(--background-color-super-lite);
+  min-width: 160px;
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.line:hover .dropdown {
+	
+  display: block;
+}
+
+.BoardButton {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 5px;
+	width: 30%;
+	border-radius: 0px;
+	display: inline;
+	background-color: var(--background-color);
+}
+
+.nextButton {
+	float: right;
+}

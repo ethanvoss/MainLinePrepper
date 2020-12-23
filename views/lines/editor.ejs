@@ -1,0 +1,407 @@
+<h1> Line Editor </h1>
+
+<script src='../public/scripts/board.js'></script>
+<link rel="stylesheet" href="../public/css/board.css">
+<% if(locals.current) { %>
+<div id='CurrentLineDisplay'>
+	<h2 id='CurrentLineName'>Currently looking at </h2>
+</div>
+<% } %>
+<div id='parent' display='flex'>
+	
+	<% if(locals.current) { %>
+		<div id='SideLineDiv'>
+			<div id='ParentLine'>
+			</div>
+			<h2>Side lines</h2>
+			<div id='SideLines'>
+				
+			</div>
+		</div>
+	<% } else { %>
+		<div id='AllLineDiv'>
+			<h2>Pick a line to get started or create a new line on the board</h2>
+			<div id='AllLines'>
+				<h2>Your Lines</h2>
+			</div>
+		</div>
+	<% } %>
+	<div id='boardDiv' float='left'>
+		<div id='board'></div>
+		<button id='Back' class='BoardButton'>Back</button>
+		<button id='Next' class='BoardButton nextButton' float='right'>Next</button>
+	</div>
+
+	<div id='PopularDisplay'>
+		<h2> Popular lines </h2>
+		<div id='popularlines'>
+	</div>
+</div>
+</div>
+
+
+
+<div id='lineControlls'>
+<div id='inputs'>
+	<h3>Line Controls</h3>
+	<div id='InputsTopRow'>
+		<button id='CreateLineBTN' onclick='newLine()'>Create new line here</button>
+		<% if(locals.current) { %>
+			<button id='CreateSideline' onclick='newSideLine()'>Create new side line here</button>
+			<button id='EditPosition'>Submit Changes And Update Line</button>
+		<% } %>
+	</div>
+	<% if(locals.current) { %>
+	<div id='InputsMiddleRow'>
+		<button id='RemoveFollowingMoves'>Remove moves past this position</button>
+		<button id='DeleteLine'>Delete Line</button>
+	</div>
+	<% } %>
+</div>
+<% if(locals.current) { %>
+<div id='LineSettings'>
+	<h3>Line Settings</h3>
+	<form action='/lines/updatename', method='POST'>
+		<input type='hidden' name='id' value='<%= current %>'></input>
+		<label>Change line's name</label>
+		<input type='text' name='name' id='NameChangeInput'></input>
+		<button type='submit'>Submit Name</button>
+	</form>
+</div>
+</div>
+<% } %>
+
+<% if(locals.current) { %>
+
+<form action='/lines/newPositions' method='POST' id='updatePositionForm'>
+	<input type='hidden' name='id' value='<%= current %>'></input>
+</form>
+<form action='/lines/delete' method='POST' id='deleteLineForm'>
+</form>
+<% } %>
+<form action='/lines/new' method='POST' id='newLineForm'>
+</form>
+
+<script>
+
+//bug: weird shit with castling is happening and the openings db display breaks after castling
+//openings db is doing too many requests //need to detect castling client side
+	const board = new Board({width: 400});
+	const lineIds = '<%= lineIds %>'.split(',');
+	const lineNames = '<%= lineNames %>'.split(',');
+	const lineStartingPositions = '<%= startingPositions %>'.split(',');
+	const lockedLines = '<%= lockedLines %>'.split(',');
+	const lockedLineParents = '<%= lockedLineParents %>'.split(',');
+	updateSideLines('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
+	<% if(locals.current) { %> 
+		for(var i in lineIds) {
+			if(lineIds[i] === '<%= current %>') {
+				document.getElementById('CurrentLineName').innerHTML += lineNames[i];
+				updateSideLines(lineStartingPositions[i]);
+				displayPopularMoves(lineStartingPositions[i]);
+				board.setPosition(lineStartingPositions[i]);
+				break;
+			}
+		}
+		for (var i in lockedLines)
+		{
+			if(lockedLines[i] == '<%= current %>') {
+				const parentDiv = document.getElementById('ParentLine');
+				const anchor = document.createElement('a');
+				const url = '/lines/editor?current=' + lockedLineParents[i];
+				anchor.setAttribute('href', url);
+				anchor.innerHTML = 'Parent Line';
+				parentDiv.appendChild(anchor);
+				break;
+			}
+		} 
+		
+
+	<% } %>
+
+	<% if(locals.positions) { %>
+		const nextButton = document.getElementById('Next');
+		const backButton = document.getElementById('Back');
+		const removeMovesButton = document.getElementById('RemoveFollowingMoves');
+		const editPositionButton = document.getElementById('EditPosition');
+		const deleteLineButton = document.getElementById('DeleteLine');
+		const positions = '<%= positions %>'.split(',');
+		var currentMove = 0;
+		var deviated = false;
+		var deviatedPositions = [];
+
+		if(positions.length > 1)
+		{
+			if(positions[0] === positions[1]) 
+				{
+					positions.splice(1, 1);
+					updatePositions(positions);
+				}
+		}
+
+		nextButton.addEventListener('click', (e) => {
+			if(!deviated && currentMove + 1 < positions.length) {
+				currentMove++;
+				updateBoard();
+			}
+		})
+		backButton.addEventListener('click', (e) => {
+			if(!deviated && currentMove - 1 >= 0) {
+				currentMove--;
+				updateBoard();
+			} else if(deviated) {
+				if(deviatedPositions.length > 1) {
+					deviatedPositions.pop();
+					board.setPosition(deviatedPositions[deviatedPositions.length - 1]);
+				} else {
+					board.resetColors();
+					deviated = false;
+					deviatedPositions = [];
+					updateBoard();
+				}
+			}
+		})
+
+		document.addEventListener('boardMove', (e) => {
+			if(!deviated) {
+				if(board.getFen() == positions[currentMove + 1]) currentMove++;
+				else if(board.getFen() == positions[currentMove - 1]) currentMove--;
+				else {
+					deviated = true;
+					deviatedPositions.push(board.getFen());
+				}
+			} else {
+				if(board.getFen() == positions[currentMove]) deviated = false;
+				else if(board.getFen() == deviatedPositions[currentMove - 1]) deviatedPositions.pop();
+				else deviatedPositions.push(board.getFen());
+			}
+			if(deviated) {
+				if(currentMove === positions.length - 1) board.updateColors('#db5a0f', '#ebebeb');
+				else board.updateColors('#cc1b1b', board.lightColor);
+			}
+			else board.resetColors();
+			displayPopularMoves(board.getFen());
+		})
+
+		editPositionButton.addEventListener('click', (e) => {
+			if(deviated) {
+				var newPositions = [];
+				for(var i = 0; i <= currentMove; i++) newPositions.push(positions[i]);
+				for(var i in deviatedPositions) newPositions.push(deviatedPositions[i]);
+				updatePositions(newPositions);
+			}
+		})
+
+		removeMovesButton.addEventListener('click', (e) => {
+			if(currentMove < positions.length - 1)
+			{
+				var newPositions = [];
+				for(var i = 0; i <= currentMove; i++) newPositions.push(positions[i]);
+				updatePositions(newPositions);
+			}
+		})
+		deleteLineButton.addEventListener('click', (e) => {
+			const deleteForm = document.getElementById('deleteLineForm');
+			const input = document.createElement('input');
+			input.setAttribute('value', '<%= current %>');
+			input.setAttribute('name', 'id');
+			deleteForm.appendChild(input);
+			deleteForm.submit();
+		});
+		function updatePositions(newPositions)
+		{
+			const updatePositionForm = document.getElementById('updatePositionForm');
+			const input = document.createElement('input');
+			input.setAttribute('name', 'newPositions');
+			input.setAttribute('value', newPositions);
+			updatePositionForm.appendChild(input);
+			updatePositionForm.submit();
+		}
+
+		function updateBoard()
+		{
+			board.setPosition(positions[currentMove]);
+			updateSideLines(positions[currentMove]);
+			displayPopularMoves(positions[currentMove]);
+		}
+	<% } %>
+
+	function displayPopularMoves(fen)
+	{
+		//jesus christ this function is ugly 
+		const apiTemplate = "https://explorer.lichess.ovh/master?variant=standard&fen=";
+		var api = apiTemplate + fen;
+		fetch(api).then((e) => {
+		  return data = e.json();
+		}).then((data) => {
+			if(data.moves.length < 1) {
+				const castlingSignifiers = ["-", "", "K","Q","k","q","KQ","Kk","Qk","Kq","Qq","kq","KQk","KQq","Kkq","Qkq","KQkq"];
+				var found = false;
+				castlingSignifiers.forEach((signifier) => {
+					if(!found) {
+						if(signifier == '-') signifier = 'w -';
+						var url = api + " " + signifier;
+						//console.log(url);
+						fetch(url).then((e) => {
+
+						  return data = e.json();
+						}).then((data) => {
+							if(data.moves.length >= 1)
+							{	
+								found = true;
+								updatePopularDisplay(data);
+								
+							} 
+						})
+					}
+				})
+				if(!found){
+					api += " b";
+					castlingSignifiers.forEach((signifier) => {
+						if(!found) {
+							var url = api + " " + signifier
+							fetch(url).then((e) => {
+							  return data = e.json();
+							}).then((data) => {
+								if(data.moves.length >= 1)
+								{
+									found = true;
+									updatePopularDisplay(data);
+									
+								} 
+							})
+						}
+					})
+				}
+				if(!found) document.getElementById('popularlines').innerHTML = 'no lines found';
+				//if(!found) console.log('something went wrong');
+			} else updatePopularDisplay(data);
+		})
+		.catch(err => console.log(err));
+	}
+
+	function updatePopularDisplay(data)
+	{
+		const lineDiv = document.getElementById('popularlines');
+		lineDiv.innerHTML = ""; //clear div
+		var count = 0;
+		data.moves.forEach((move) => {
+			if(count > 4) return;
+			const line = document.createElement('div');
+			line.setAttribute('class', 'line');
+			const title = document.createElement('h3');
+			title.innerHTML = move.san;
+			title.setAttribute('class', 'popularMoveTitle');
+			line.appendChild(title);
+			const dropdown = document.createElement('div');
+			dropdown.setAttribute('class', 'dropdown');
+			const white = document.createElement('p');
+			white.innerHTML = "White " + move.white;
+			dropdown.appendChild(white);
+			const draw = document.createElement('p');
+			draw.innerHTML = "Draw " + move.draws;
+			dropdown.appendChild(draw);
+			const black = document.createElement('p');
+			black.innerHTML = "Black " + move.black;
+			dropdown.appendChild(black);
+			line.appendChild(dropdown);
+			lineDiv.appendChild(line);
+			lineDiv.appendChild(document.createElement('br'));
+			count++;
+		})
+
+
+	}
+
+	function newLine()
+	{
+		const newLineForm = document.getElementById('newLineForm');
+		const startingPosition = board.getFen();
+		const input = document.createElement('input');
+		input.setAttribute('name', 'startingPosition');
+		input.setAttribute('value', startingPosition);
+		<% if(locals.current) { %>
+		const parent = document.createElement('input');
+		parent.setAttribute('name', 'parent');
+		parent.setAttribute('value', '<%= current %>');
+		newLineForm.appendChild(parent);
+		<% } %>
+		newLineForm.appendChild(input);
+		newLineForm.submit();
+		newLineForm.innerHTML = '';
+	}
+	function newSideLine()
+	{
+		const newLineForm = document.getElementById('newLineForm');
+		const startingPosition = board.getFen();
+		const input = document.createElement('input');
+		input.setAttribute('name', 'startingPosition');
+		input.setAttribute('value', startingPosition);
+		const sidelineindicator = document.createElement('input');
+		sidelineindicator.setAttribute('name', 'sidelineindicator');
+		sidelineindicator.setAttribute('value', 'true');
+		<% if(locals.current) { %>
+		const parent = document.createElement('input');
+		parent.setAttribute('name', 'parent');
+		parent.setAttribute('value', '<%= current %>');
+		newLineForm.appendChild(parent);
+		<% } %>
+		const positionInput = document.createElement('input');
+		positionInput.setAttribute('name', 'positions');
+		const outgoingPositions = [];
+		newLineForm.appendChild(input);
+		newLineForm.appendChild(sidelineindicator);
+		newLineForm.submit();
+		newLineForm.innerHTML = '';
+	}
+
+	function updateSideLines(position)
+	{
+		<% if(locals.current) { %>
+			const LineList = document.getElementById('SideLines');
+			LineList.innerHTML = '';
+			for(var i in lineIds)
+			{
+				var transposable = (position === lineStartingPositions[i] && lineIds[i] !== '<%= current %>');
+				
+				for(var j in lockedLines);
+				{
+					if(lockedLines[j] == lineIds[i] && lockedLineParents[j] != '<%= current %>')
+					{
+						transposable = false;
+					}	
+				}
+
+				if(transposable)
+				{
+					const link = document.createElement('a');
+					var url = "/lines/editor?current=" + lineIds[i];
+					link.setAttribute('href', url);
+					link.innerHTML = lineNames[i];
+					LineList.appendChild(link);
+					LineList.appendChild(document.createElement('br'));
+				}
+				
+			}
+		<% } else { %>
+			const AllLineList = document.getElementById('AllLines');
+			AllLineList.innerHTML = '';
+			for(var i in lineIds)
+			{
+				const isSideLine = lockedLines.some((line) => { return line == lineIds[i] })
+				if(!isSideLine) {
+					const link = document.createElement('a');
+					var url = "/lines/editor?current=" + lineIds[i];
+					link.setAttribute('href', url);
+					link.innerHTML = lineNames[i];
+					AllLineList.appendChild(link);
+					AllLineList.appendChild(document.createElement('br'));
+				}
+				
+			}
+		<% } %>
+	}
+
+
+
+</script>

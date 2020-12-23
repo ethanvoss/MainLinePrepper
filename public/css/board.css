@@ -1,0 +1,32 @@
+:root {
+	--square-size: 50px;
+}
+
+div[class^="square"]{
+	float: left;
+	width: var(--square-size);
+	height: var(--square-size);
+	transition-duration: 0.3s;
+}
+
+
+.piece {
+	float: left;
+	position: absolute;
+
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.pieceImg {
+	width: var(--square-size);
+	height: var(--square-size);
+}
+
+.squareLight {
+	background-color: gray;
+}
+.squareDark {
+	background-color: black;
+}
+

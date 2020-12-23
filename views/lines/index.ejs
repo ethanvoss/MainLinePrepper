@@ -1,0 +1,122 @@
+<h1>Line Viewer</h1>
+<script src='../public/scripts/board.js'></script>
+<link rel="stylesheet" href="../public/css/board.css">
+
+<div id='board'></div>
+
+<% if(locals.current) { %>
+
+<div id='inputs'>
+<button id='Back'>Back</button>
+<button id='Next'>Next</button>
+ <a id="mybutton" href="/lines/editor?current=<%= current %>" title="link to edit">
+  <button>Edit this line</button>
+ </a>
+</div>
+
+
+
+<div id='CurrentLineDisplay'>
+	<h2 id='CurrentLineName'>Currently looking at </h2>
+</div>
+
+<div>
+	<h2>Side lines</h2>
+	<div  id='SideLines'>
+	</div>
+</div>
+ <a id="myotherbutton" href="/lines" title="link to all lines">
+  <button>All lines</button>
+ </a>
+<% } else { %>
+<h2>Pick a line to get started</h2>
+<div id='AllLines'>
+	<h2>Your Lines</h2>
+</div>
+
+<% } %>
+
+<script>
+
+	///needs deviation detection or no deviation possible
+	const board = new Board({width: 400, locked: true});
+	const lineIds = '<%= lineIds %>'.split(',');
+	const lineNames = '<%= lineNames %>'.split(',');
+	const lineStartingPositions = '<%= startingPositions %>'.split(',');
+	updateSideLines('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
+	<% if(locals.current) { %> 
+		for(var i in lineIds) {
+			if(lineIds[i] === '<%= current %>') {
+				document.getElementById('CurrentLineName').innerHTML += lineNames[i];
+				updateSideLines(lineStartingPositions[i]);
+				board.setPosition(lineStartingPositions[i]);
+				break;
+			}
+		}
+
+	<% } %>
+	document.addEventListener('boardMove', function(e){
+		updateSideLines(board.getFen());
+	})
+
+	function updateSideLines(position)
+	{
+		<% if(locals.current) { %>
+			const LineList = document.getElementById('SideLines');
+			LineList.innerHTML = '';
+			for(var i in lineIds)
+			{
+				if(position === lineStartingPositions[i] && lineIds[i] !== '<%= current %>')
+				{
+					const link = document.createElement('a');
+					var url = "/lines?current=" + lineIds[i];
+					link.setAttribute('href', url);
+					link.innerHTML = lineNames[i];
+					LineList.appendChild(link);
+					LineList.appendChild(document.createElement('br'));
+				}
+				
+			}
+		<% } else { %>
+			const AllLineList = document.getElementById('AllLines');
+			AllLineList.innerHTML = '';
+			for(var i in lineIds)
+			{
+				const link = document.createElement('a');
+				var url = "/lines?current=" + lineIds[i];
+				link.setAttribute('href', url);
+				link.innerHTML = lineNames[i];
+				AllLineList.appendChild(link);
+				AllLineList.appendChild(document.createElement('br'));
+			}
+		<% } %>
+	}
+
+	<% if(locals.positions) { %>
+		const nextButton = document.getElementById('Next');
+		const backButton = document.getElementById('Back');
+		const positions = '<%= positions %>'.split(',');
+		console.log(positions);
+		var currentMove = 0;
+
+		nextButton.addEventListener('click', (e) => {
+			if(currentMove + 1 < positions.length) {
+				currentMove++;
+				updateBoard();
+			}
+		})
+		backButton.addEventListener('click', (e) => {
+			if(currentMove - 1 >= 0) {
+				currentMove--;
+				updateBoard();
+			} 
+		})
+
+		function updateBoard()
+		{
+			board.setPosition(positions[currentMove]);
+			updateSideLines(board.getFen());
+		}
+	<% } %>
+
+</script>
