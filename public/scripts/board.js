@@ -175,7 +175,7 @@ class Board
 		else if (document.styleSheets[1].rules)
 			myCss = document.styleSheets[1].rules
 		else return;
-		console.log(myCss[5])
+		console.log(myCss);
 
 		myCss[5].style.backgroundColor = darkColor;
 		myCss[4].style.backgroundColor = lightColor;
