@@ -170,10 +170,14 @@ class Board
 	updateColors(darkColor, lightColor) {
 		if (!document.styleSheets) return;
 		var myCss = new Array();
-		if (document.styleSheets[1].cssRules)
+		if (document.styleSheets[1].cssRules) {
 			myCss = document.styleSheets[1].cssRules
-		else if (document.styleSheets[1].rules)
+			console.log('1');
+		}
+		else if (document.styleSheets[1].rules) {
 			myCss = document.styleSheets[1].rules
+			console.log('2');
+		}
 		else return;
 		console.log(myCss[5].style)
 		myCss[5].style.backgroundColor = darkColor;
