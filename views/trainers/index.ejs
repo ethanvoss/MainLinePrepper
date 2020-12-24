@@ -2,32 +2,46 @@
 <script src='../public/scripts/board.js'></script>
 <link rel="stylesheet" href="../public/css/board.css">
 
-<div id='board'></div>
+<div id='parent' display='flex'>	
+	
+		<div id='AllLineDiv'>
+			<h2>Pick a line to get started or create a new line on the board</h2>
+			<div id='AllLines'>
+				<h2>Your Lines</h2>
+			</div>
+		</div>
 
+		<div id='boardDiv' float='left'>
+			<div id='board'></div>
+		</div>
 
-<h2>Pick a line to get started</h2>
-<div id='AllLines'>
-	<h2>Your Lines</h2>
+	</div>
 </div>
-
+</div>
 
 <script>
 
-	///needs deviation detection or no deviation possible
-	const board = new Board({width: 400, locked: true});
+	const board = new Board({width: 400});
 	const lineIds = '<%= lineIds %>'.split(',');
 	const lineNames = '<%= lineNames %>'.split(',');
 	const lineStartingPositions = '<%= startingPositions %>'.split(',');
+	const lockedLines = '<%= lockedLines %>'.split(',');
+	const lockedLineParents = '<%= lockedLineParents %>'.split(',');
 	updateSideLines('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
 	<% if(locals.current) { %> 
-		for(var i in lineIds) {
-			if(lineIds[i] === '<%= current %>') {
-				document.getElementById('CurrentLineName').innerHTML += lineNames[i];
-				updateSideLines(lineStartingPositions[i]);
-				board.setPosition(lineStartingPositions[i]);
+		for (var i in lockedLines)
+		{
+			if(lockedLines[i] == '<%= current %>') {
+				const parentDiv = document.getElementById('ParentLine');
+				const anchor = document.createElement('a');
+				const url = '/lines/?current=' + lockedLineParents[i];
+				anchor.setAttribute('href', url);
+				anchor.innerHTML = 'Parent Line';
+				parentDiv.appendChild(anchor);
 				break;
 			}
-		}
+		} 
+		
 
 	<% } %>
 	document.addEventListener('boardMove', function(e){
@@ -36,56 +50,27 @@
 
 	function updateSideLines(position)
 	{
-		<% if(locals.current) { %>
-			const LineList = document.getElementById('SideLines');
-			LineList.innerHTML = '';
-			for(var i in lineIds)
-			{
-				if(position === lineStartingPositions[i] && lineIds[i] !== '<%= current %>')
-				{
-					const link = document.createElement('a');
-					var url = "/lines?current=" + lineIds[i];
-					link.setAttribute('href', url);
-					link.innerHTML = lineNames[i];
-					LineList.appendChild(link);
-					LineList.appendChild(document.createElement('br'));
-				}
-				
-			}
-		<% } else { %>
-			const AllLineList = document.getElementById('AllLines');
-			AllLineList.innerHTML = '';
-			for(var i in lineIds)
-			{
+		const AllLineList = document.getElementById('AllLines');
+		AllLineList.innerHTML = '';
+		for(var i in lineIds)
+		{
+			const isSideLine = lockedLines.some((line) => { return line == lineIds[i] })
+			if(!isSideLine) {
 				const link = document.createElement('a');
-				var url = "/lines?current=" + lineIds[i];
+				var url = "/lines/?current=" + lineIds[i];
 				link.setAttribute('href', url);
 				link.innerHTML = lineNames[i];
 				AllLineList.appendChild(link);
 				AllLineList.appendChild(document.createElement('br'));
 			}
-		<% } %>
+		}
 	}
 
 	<% if(locals.positions) { %>
 		const nextButton = document.getElementById('Next');
 		const backButton = document.getElementById('Back');
 		const positions = '<%= positions %>'.split(',');
-		console.log(positions);
 		var currentMove = 0;
-
-		nextButton.addEventListener('click', (e) => {
-			if(currentMove + 1 < positions.length) {
-				currentMove++;
-				updateBoard();
-			}
-		})
-		backButton.addEventListener('click', (e) => {
-			if(currentMove - 1 >= 0) {
-				currentMove--;
-				updateBoard();
-			} 
-		})
 
 		function updateBoard()
 		{
