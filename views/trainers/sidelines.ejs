@@ -17,6 +17,9 @@
 
 	</div>
 </div>
+
+<form id='nextForm' action='trainer/sideline' method='POST'>
+</form>
 </div>
 
 <script>
@@ -42,13 +45,23 @@
 			const isSideLine = lockedLines.some((line) => { return line == lineIds[i] })
 			if(!isSideLine) {
 				const link = document.createElement('a');
-				var url = "/lines/?current=" + lineIds[i];
-				link.setAttribute('href', url);
+				link.setAttribute('href', '#');
+				link.setAttribute('onclick', 'nextPage(' + lineIds[i] + ')');
 				link.innerHTML = lineNames[i];
 				AllLineList.appendChild(link);
 				AllLineList.appendChild(document.createElement('br'));
 			}
 		}
+	}
+
+	function nextPage(lineId)
+	{
+		const nextForm = document.getElementById('nextForm');
+		const input = document.createElement('input');
+		input.setAttribute('name', 'lineId');
+		input.setAttribute('value', lineId);
+		nextForm.appendChild(input);
+		nextForm.submit();
 	}
 
 </script>

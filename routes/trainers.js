@@ -30,12 +30,6 @@ router.get('/', checkAuthenticated, async (req, res) => {
 		lockedLines: lockedLines, 
 		lockedLineParents: lockedLineParents
 	};
-	if(req.query.current)
-	{
-		initObj.current = req.query.current;
-		const positions = await Line.findOne({_id: req.query.current}, 'positions').lean();
-		initObj.positions = positions.positions; //this is a really stupid quirk of mongoose
-	}
 	res.render('trainers/index', initObj);
 });
 
