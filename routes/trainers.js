@@ -35,7 +35,7 @@ router.get('/', checkAuthenticated, async (req, res) => {
 
 router.get('/sideline', checkAuthenticated, async (req, res) => {
 	const lines = await Line.find({userId: req.user._id}, 'parentLine name').lean();
-	const selected = req.query.lineId;
+	const selected = req.query.current;
 	var sidelines = [];
 	var sidelinenames = [];
 	lines.forEach((sideline) => {

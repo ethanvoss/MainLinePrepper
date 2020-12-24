@@ -19,10 +19,6 @@
 </div>
 </div>
 
-<form id='nextForm' action='trainer/sideline' method='GET'>
-</form>
-
-
 <script>
 
 	const board = new Board({width: 400});
@@ -46,22 +42,12 @@
 			const isSideLine = lockedLines.some((line) => { return line == lineIds[i] })
 			if(!isSideLine) {
 				const link = document.createElement('a');
-				link.setAttribute('href', '#');
-				link.setAttribute('onclick', 'nextPage(\'' + lineIds[i] + '\')');
+				link.setAttribute('href', 'trainer/sideline?current=' + lineIds[i]);
 				link.innerHTML = lineNames[i];
 				AllLineList.appendChild(link);
 				AllLineList.appendChild(document.createElement('br'));
 			}
 		}
-	}
-	function nextPage(lineId)
-	{
-		const nextForm = document.getElementById('nextForm');
-		const input = document.createElement('input');
-		input.setAttribute('name', 'lineId');
-		input.setAttribute('value', lineId);
-		nextForm.appendChild(input);
-		nextForm.submit();
 	}
 
 </script>
