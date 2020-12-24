@@ -16,7 +16,7 @@ const session = require('express-session');
 initializePassport(passport);
 
 const indexRouter = require('./routes/index');
-const trainerRouter = require('./routes/trainer');
+const trainerRouter = require('./routes/trainers');
 const linesRouter = require('./routes/lines');
 const usersRouter = require('./routes/users');
 
