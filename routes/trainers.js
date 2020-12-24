@@ -57,7 +57,22 @@ router.get('/sideline', checkAuthenticated, async (req, res) => {
 });
 
 router.get('/movetrainer', checkAuthenticated, async (req, res) => {
-	res.render('trainers/index');
+	const line = await Line.findOne({_id: req.query.current}, 'positions startingPosition').lean();
+	const positions = line.positions;
+	const startingPosition = line.startingPosition;
+	const initObj = {
+		startingPosition: startingPosition,
+		positions: positions
+	};
+	if(req.query.sideline)
+	{
+		const sideline = await Line.findOne({_id: req.query.sideline}, 'positions startingPosition').lean();
+		initObj.sidelinePositions = sideline.positions;
+		initObj.sidelineStartingPosition = sideline.startingPosition;
+	}
+
+	
+	res.render('trainers/movetrainer', initObj);
 });
 
 
