@@ -36,10 +36,8 @@ router.get('/', checkAuthenticated, async (req, res) => {
 router.get('/sideline', checkAuthenticated, async (req, res) => {
 	const lines = await Line.find({userId: req.user._id}, 'parentLine').lean();
 	const selected = req.query.lineId;
-	console.log('selected: ' + selected);
 	var sidelines = [];
 	lines.forEach((sideline) => {
-		console.log(sideline);
 		if(sideline.parentLine !== undefined) {
 			if(sideline.parentLine === selected)
 			{
@@ -47,9 +45,8 @@ router.get('/sideline', checkAuthenticated, async (req, res) => {
 			}
 		}
 	})
-
-	console.log(sidelines);
-	res.render('trainers/sidelines');
+	if(sidelines.length > 0) res.render('trainers/sidelines');
+	else res.redirect('trainer/movetrainer?current='+selected);
 });
 
 router.get('/movetrainer', checkAuthenticated, async (req, res) => {
