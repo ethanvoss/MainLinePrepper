@@ -95,7 +95,7 @@
 				if(transposable)
 				{
 					const link = document.createElement('a');
-					var url = "/lines/editor?current=" + lineIds[i];
+					var url = "/lines/?current=" + lineIds[i];
 					link.setAttribute('href', url);
 					link.innerHTML = lineNames[i];
 					LineList.appendChild(link);
@@ -111,7 +111,7 @@
 				const isSideLine = lockedLines.some((line) => { return line == lineIds[i] })
 				if(!isSideLine) {
 					const link = document.createElement('a');
-					var url = "/lines/editor?current=" + lineIds[i];
+					var url = "/lines/?current=" + lineIds[i];
 					link.setAttribute('href', url);
 					link.innerHTML = lineNames[i];
 					AllLineList.appendChild(link);
