@@ -51,7 +51,6 @@
 			if(lineIds[i] === '<%= current %>') {
 				document.getElementById('CurrentLineName').innerHTML += lineNames[i];
 				updateSideLines(lineStartingPositions[i]);
-				displayPopularMoves(lineStartingPositions[i]);
 				board.setPosition(lineStartingPositions[i]);
 				break;
 			}
@@ -61,7 +60,7 @@
 			if(lockedLines[i] == '<%= current %>') {
 				const parentDiv = document.getElementById('ParentLine');
 				const anchor = document.createElement('a');
-				const url = '/lines/editor?current=' + lockedLineParents[i];
+				const url = '/lines/?current=' + lockedLineParents[i];
 				anchor.setAttribute('href', url);
 				anchor.innerHTML = 'Parent Line';
 				parentDiv.appendChild(anchor);
@@ -126,7 +125,6 @@
 		const nextButton = document.getElementById('Next');
 		const backButton = document.getElementById('Back');
 		const positions = '<%= positions %>'.split(',');
-		console.log(positions);
 		var currentMove = 0;
 
 		nextButton.addEventListener('click', (e) => {
