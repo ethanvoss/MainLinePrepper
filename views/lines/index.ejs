@@ -2,12 +2,14 @@
 <script src='../public/scripts/board.js'></script>
 <link rel="stylesheet" href="../public/css/board.css">
 
+
+
+
+<% if(locals.current) { %>
 <a id="mybutton" href="/lines/editor?current=<%= current %>" title="link to edit">
   <button>Edit this line</button>
 </a>
 
-
-<% if(locals.current) { %>
 <div id='CurrentLineDisplay'>
 	<h2 id='CurrentLineName'>Currently looking at </h2>
 </div>
