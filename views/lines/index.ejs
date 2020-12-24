@@ -5,11 +5,12 @@
 <div id='CurrentLineDisplay'>
 	<h2 id='CurrentLineName'>Currently looking at </h2>
 </div>
+<div id='parent' display='flex'>
 
 <div id='boardDiv' float='left'>
 	<div id='board'></div>
 	<button id='Back' class='BoardButton'>Back</button>
-	<button id='Next' class='BoardButton'>Next</button>
+	<button id='Next' class='BoardButton' float='right'>Next</button>
 </div>
 <% if(locals.current) { %>
  <a id="mybutton" href="/lines/editor?current=<%= current %>" title="link to edit">
@@ -28,7 +29,9 @@
  <a id="myotherbutton" href="/lines" title="link to all lines">
   <button>All lines</button>
  </a>
+</div>
 <% } else { %>
+</div>
 <div id='AllLineDiv'>
 	<h2>Pick a line to get started</h2>
 	<div id='AllLines'>
