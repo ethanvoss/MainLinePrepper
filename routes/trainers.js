@@ -53,7 +53,7 @@ router.get('/sideline', checkAuthenticated, async (req, res) => {
 		sidelinenames: sidelinenames
 	}
 	if(sidelines.length > 0) res.render('trainers/sidelines', initObj);
-	else res.redirect('/movetrainer?current='+selected);
+	else res.redirect('trainer/movetrainer?current='+selected);
 });
 
 router.get('/movetrainer', checkAuthenticated, async (req, res) => {
