@@ -31,13 +31,13 @@
 	const mainlineanchor = document.getElementById('mainlineanchor');
 	mainlineanchor.setAttribute('href', 'trainer/movetrainer?current=' + current);
 
-	for(var i in sidelines){
+	for(var i in sidelines) {
 		const linelink = document.createElement('a');
 		linelink.setAttribute('href', 'trainer/movetrainer?current=' + current + ' sideline=' + sidelines[i]);
 		const title = document.createElement('h3');
 		title.innerHTML = sidelinenames[i];
 		linelink.appendChild(title);
 		document.getElementById('AllLines').appendChild(linelink);
-	})
+	};
 
 </script>
