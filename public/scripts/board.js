@@ -170,12 +170,20 @@ class Board
 	updateColors(darkColor, lightColor) {
 		if (!document.styleSheets) return;
 		var myCss = new Array();
-		if (document.styleSheets[1].cssRules)
-			myCss = document.styleSheets[1].cssRules
-		else if (document.styleSheets[1].rules)
-			myCss = document.styleSheets[1].rules
+		var styleSheet;
+		const styleSheets = Array.from(document.styleSheets);
+
+		styleSheets.forEach((sheet) => {
+			if(sheet.href == 'https://mainlinetrainer.herokuapp.com/public/css/board.css')
+				styleSheet = sheet;
+		})
+		var index = StyleSheets.indexOf(styleSheet);
+
+		if (document.styleSheets[index].cssRules)
+			myCss = document.styleSheets[index].cssRules
+		else if (document.styleSheets[index].rules)
+			myCss = document.styleSheets[index].rules
 		else return;
-		console.log(document.styleSheets);
 
 		myCss[5].style.backgroundColor = darkColor;
 		myCss[4].style.backgroundColor = lightColor;
