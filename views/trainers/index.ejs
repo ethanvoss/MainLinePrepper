@@ -4,37 +4,12 @@
 
 <div id='board'></div>
 
-<% if(locals.current) { %>
 
-<div id='inputs'>
-<button id='Back'>Back</button>
-<button id='Next'>Next</button>
- <a id="mybutton" href="/lines/editor?current=<%= current %>" title="link to edit">
-  <button>Edit this line</button>
- </a>
-</div>
-
-
-
-<div id='CurrentLineDisplay'>
-	<h2 id='CurrentLineName'>Currently looking at </h2>
-</div>
-
-<div>
-	<h2>Side lines</h2>
-	<div  id='SideLines'>
-	</div>
-</div>
- <a id="myotherbutton" href="/lines" title="link to all lines">
-  <button>All lines</button>
- </a>
-<% } else { %>
 <h2>Pick a line to get started</h2>
 <div id='AllLines'>
 	<h2>Your Lines</h2>
 </div>
 
-<% } %>
 
 <script>
 
@@ -66,20 +41,10 @@
 			LineList.innerHTML = '';
 			for(var i in lineIds)
 			{
-				var transposable = (position === lineStartingPositions[i] && lineIds[i] !== '<%= current %>');
-				
-				for(var j in lockedLines);
-				{
-					if(lockedLines[j] == lineIds[i] && lockedLineParents[j] != '<%= current %>')
-					{
-						transposable = false;
-					}	
-				}
-
-				if(transposable)
+				if(position === lineStartingPositions[i] && lineIds[i] !== '<%= current %>')
 				{
 					const link = document.createElement('a');
-					var url = "/lines/editor?current=" + lineIds[i];
+					var url = "/lines?current=" + lineIds[i];
 					link.setAttribute('href', url);
 					link.innerHTML = lineNames[i];
 					LineList.appendChild(link);
@@ -92,20 +57,16 @@
 			AllLineList.innerHTML = '';
 			for(var i in lineIds)
 			{
-				const isSideLine = lockedLines.some((line) => { return line == lineIds[i] })
-				if(!isSideLine) {
-					const link = document.createElement('a');
-					var url = "/lines/editor?current=" + lineIds[i];
-					link.setAttribute('href', url);
-					link.innerHTML = lineNames[i];
-					AllLineList.appendChild(link);
-					AllLineList.appendChild(document.createElement('br'));
-				}
-				
+				const link = document.createElement('a');
+				var url = "/lines?current=" + lineIds[i];
+				link.setAttribute('href', url);
+				link.innerHTML = lineNames[i];
+				AllLineList.appendChild(link);
+				AllLineList.appendChild(document.createElement('br'));
 			}
 		<% } %>
 	}
-	
+
 	<% if(locals.positions) { %>
 		const nextButton = document.getElementById('Next');
 		const backButton = document.getElementById('Back');

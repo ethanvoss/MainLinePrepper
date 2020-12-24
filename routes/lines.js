@@ -12,18 +12,31 @@ router.get('/', checkAuthenticated, async (req, res) => {
 	const lineIds = [];
 	const lineNames = [];
 	const startingPositions = [];
+	const lockedLines = [];
+	const lockedLineParents = [];
 	lines.forEach((line) => {
+		if(line.transposable === false)
+		{
+			lockedLines.push(line._id);
+			lockedLineParents.push(line.parentLine);	
+		}
 		lineIds.push(line._id);
 		lineNames.push(line.name);
 		startingPositions.push(line.startingPosition);
 	})
-	var initObj = {lineIds: lineIds, lineNames: lineNames, startingPositions: startingPositions};
+	var initObj = {
+		lineIds: lineIds, 
+		lineNames: lineNames, 
+		startingPositions: startingPositions, 
+		lockedLines: lockedLines, 
+		lockedLineParents: lockedLineParents
+	};
 	if(req.query.current)
-		{
-			initObj.current = req.query.current;
-			const positions = await Line.findOne({_id: req.query.current}, 'positions').lean();
-			initObj.positions = positions.positions; //this is a really stupid quirk of mongoose
-		}
+	{
+		initObj.current = req.query.current;
+		const positions = await Line.findOne({_id: req.query.current}, 'positions').lean();
+		initObj.positions = positions.positions; //this is a really stupid quirk of mongoose
+	}
 	res.render('lines/index', initObj);
 });
 router.get('/editor', checkAuthenticated, async (req, res) => {
