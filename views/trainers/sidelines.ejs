@@ -19,8 +19,6 @@
 	</div>
 </div>
 
-<form id='nextForm' action='trainer/sideline' method='GET'>
-</form>
 </div>
 
 <script>
@@ -29,11 +27,11 @@
 	const sidelines = '<%= sidelines %>'.split(',');
 	const sidelinenames = '<%= sidelinenames %>'.split(',');
 	const mainlineanchor = document.getElementById('mainlineanchor');
-	mainlineanchor.setAttribute('href', 'trainer/movetrainer?current=' + current);
+	mainlineanchor.setAttribute('href', '/movetrainer?current=' + current);
 
 	for(var i in sidelines) {
 		const linelink = document.createElement('a');
-		linelink.setAttribute('href', 'trainer/movetrainer?current=' + current + ' sideline=' + sidelines[i]);
+		linelink.setAttribute('href', '/movetrainer?current=' + current + ' sideline=' + sidelines[i]);
 		const title = document.createElement('h3');
 		title.innerHTML = sidelinenames[i];
 		linelink.appendChild(title);
