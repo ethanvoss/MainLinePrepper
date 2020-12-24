@@ -35,11 +35,13 @@ router.get('/', checkAuthenticated, async (req, res) => {
 
 router.get('/sideline', checkAuthenticated, async (req, res) => {
 	const lines = await Line.find({userId: req.user._id}, 'parentLine').lean();
-	const selected = req.body.lineId;
+	const selected = req.query.lineId;
+	console.log('selected: ' + selected);
 	var sidelines = [];
 	lines.forEach((sideline) => {
-		if(sideline.parent) {
-			if(sideline.parent === selected)
+		console.log(sideline);
+		if(sideline.parentLine !== undefined) {
+			if(sideline.parentLine === selected)
 			{
 				sidelines.push(sideline._id);
 			}
@@ -47,7 +49,7 @@ router.get('/sideline', checkAuthenticated, async (req, res) => {
 	})
 
 	console.log(sidelines);
-	res.render('trainers/index');
+	res.render('trainers/sidelines');
 });
 
 router.get('/movetrainer', checkAuthenticated, async (req, res) => {
