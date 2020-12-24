@@ -2,38 +2,38 @@
 <script src='../public/scripts/board.js'></script>
 <link rel="stylesheet" href="../public/css/board.css">
 
-<div id='board'></div>
 
+<div id='boardDiv' float='left'>
+	<div id='board'></div>
+	<button id='Back'>Back</button>
+	<button id='Next'>Next</button>
+</div>
 <% if(locals.current) { %>
-
-<div id='inputs'>
-<button id='Back'>Back</button>
-<button id='Next'>Next</button>
  <a id="mybutton" href="/lines/editor?current=<%= current %>" title="link to edit">
   <button>Edit this line</button>
  </a>
-</div>
-
-
 
 <div id='CurrentLineDisplay'>
 	<h2 id='CurrentLineName'>Currently looking at </h2>
 </div>
 
-<div>
+<div id='SideLineDiv'>
 	<h2>Side lines</h2>
 	<div  id='SideLines'>
+		<div id='ParentLine'>
+		</div>
 	</div>
 </div>
  <a id="myotherbutton" href="/lines" title="link to all lines">
   <button>All lines</button>
  </a>
 <% } else { %>
-<h2>Pick a line to get started</h2>
-<div id='AllLines'>
-	<h2>Your Lines</h2>
+<div id='AllLineDiv'>
+	<h2>Pick a line to get started</h2>
+	<div id='AllLines'>
+		<h2>Your Lines</h2>
+	</div>
 </div>
-
 <% } %>
 
 <script>
