@@ -7,7 +7,7 @@
 		<div id='AllLineDiv'>
 			<h2>This line has side lines. Would you like to practice the main line or one of the side lines?</h2>
 			<div id='AllLines'>
-				<a><h2>Main Line</h2></a>
+				<a id='mainlineanchor'><h2>Main Line</h2></a>
 				<h2>Your SideLines</h2>
 			</div>
 		</div>
@@ -24,7 +24,20 @@
 </div>
 
 <script>
-
 	const board = new Board({width: 400});
+	const current = '<%= current %>';
+	const sidelines = '<%= sidelines %>'.split(',');
+	const sidelinenames = '<%= sidelinenames %>'.split(',');
+	const mainlineanchor = document.getElementById('mainlineanchor');
+	mainlineanchor.setAttribute('href', 'trainer/movetrainer?current=' + current);
+
+	for(var i in sidelines){
+		const linelink = document.createElement('a');
+		linelink.setAttribute('href', 'trainer/movetrainer?current=' + current + ' sideline=' + sidelines[i]);
+		const title = document.createElement('h3');
+		title.innerHTML = sidelinenames[i];
+		linelink.appendChild(title);
+		document.getElementById('AllLines').appendChild(linelink);
+	})
 
 </script>

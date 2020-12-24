@@ -34,18 +34,25 @@ router.get('/', checkAuthenticated, async (req, res) => {
 });
 
 router.get('/sideline', checkAuthenticated, async (req, res) => {
-	const lines = await Line.find({userId: req.user._id}, 'parentLine').lean();
+	const lines = await Line.find({userId: req.user._id}, 'parentLine name').lean();
 	const selected = req.query.lineId;
 	var sidelines = [];
+	var sidelinenames = [];
 	lines.forEach((sideline) => {
 		if(sideline.parentLine !== undefined) {
 			if(sideline.parentLine === selected)
 			{
 				sidelines.push(sideline._id);
+				sidelinenames.push(sideline.name);
 			}
 		}
 	})
-	if(sidelines.length > 0) res.render('trainers/sidelines');
+	const initObj = {
+		current: selected,
+		sidelines: sidelines,
+		sidelinenames: sidelinenames
+	}
+	if(sidelines.length > 0) res.render('trainers/sidelines', initObj);
 	else res.redirect('trainer/movetrainer?current='+selected);
 });
 
