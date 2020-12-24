@@ -7,11 +7,7 @@
 </div>
 <div id='parent' display='flex'>
 
-<div id='boardDiv' float='left'>
-	<div id='board'></div>
-	<button id='Back' class='BoardButton'>Back</button>
-	<button id='Next' class='BoardButton' float='right'>Next</button>
-</div>
+
 <% if(locals.current) { %>
  <a id="mybutton" href="/lines/editor?current=<%= current %>" title="link to edit">
   <button>Edit this line</button>
@@ -40,9 +36,14 @@
 </div>
 <% } %>
 
+<div id='boardDiv' float='left'>
+	<div id='board'></div>
+	<button id='Back' class='BoardButton'>Back</button>
+	<button id='Next' class='BoardButton' float='right'>Next</button>
+</div>
+
 <script>
 
-	///needs deviation detection or no deviation possible
 	const board = new Board({width: 400, locked: true});
 	const lineIds = '<%= lineIds %>'.split(',');
 	const lineNames = '<%= lineNames %>'.split(',');
