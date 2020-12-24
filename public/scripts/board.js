@@ -177,7 +177,7 @@ class Board
 			if(sheet.href == 'https://mainlinetrainer.herokuapp.com/public/css/board.css')
 				styleSheet = sheet;
 		})
-		var index = StyleSheets.indexOf(styleSheet);
+		var index = styleSheets.indexOf(styleSheet);
 
 		if (document.styleSheets[index].cssRules)
 			myCss = document.styleSheets[index].cssRules
