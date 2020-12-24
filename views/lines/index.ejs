@@ -2,44 +2,46 @@
 <script src='../public/scripts/board.js'></script>
 <link rel="stylesheet" href="../public/css/board.css">
 
-<div id='CurrentLineDisplay'>
-	<h2 id='CurrentLineName'>Currently looking at </h2>
-</div>
-<div id='parent' display='flex'>
+<a id="mybutton" href="/lines/editor?current=<%= current %>" title="link to edit">
+  <button>Edit this line</button>
+</a>
 
 
 <% if(locals.current) { %>
- <a id="mybutton" href="/lines/editor?current=<%= current %>" title="link to edit">
-  <button>Edit this line</button>
- </a>
-
-
-
-<div id='SideLineDiv'>
-	<h2>Side lines</h2>
-	<div  id='SideLines'>
-		<div id='ParentLine'>
-		</div>
-	</div>
-</div>
- <a id="myotherbutton" href="/lines" title="link to all lines">
-  <button>All lines</button>
- </a>
-</div>
-<% } else { %>
-</div>
-<div id='AllLineDiv'>
-	<h2>Pick a line to get started</h2>
-	<div id='AllLines'>
-		<h2>Your Lines</h2>
-	</div>
+<div id='CurrentLineDisplay'>
+	<h2 id='CurrentLineName'>Currently looking at </h2>
 </div>
 <% } %>
+<div id='parent' display='flex'>
+	
+	<% if(locals.current) { %>
+		<div id='SideLineDiv'>
+			<div id='ParentLine'>
+			</div>
+			<h2>Side lines</h2>
+			<div id='SideLines'>
+				
+			</div>
+		</div>
+	<% } else { %>
+		<div id='AllLineDiv'>
+			<h2>Pick a line to get started or create a new line on the board</h2>
+			<div id='AllLines'>
+				<h2>Your Lines</h2>
+			</div>
+		</div>
+	<% } %>
+	<div id='boardDiv' float='left'>
+		<div id='board'></div>
+		<button id='Back' class='BoardButton'>Back</button>
+		<button id='Next' class='BoardButton nextButton' float='right'>Next</button>
+	</div>
 
-<div id='boardDiv' float='left'>
-	<div id='board'></div>
-	<button id='Back' class='BoardButton'>Back</button>
-	<button id='Next' class='BoardButton' float='right'>Next</button>
+	<div id='PopularDisplay'>
+		<h2> Popular lines </h2>
+		<div id='popularlines'>
+	</div>
+</div>
 </div>
 
 <script>
