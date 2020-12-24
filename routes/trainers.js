@@ -2,16 +2,21 @@ const express = require('express');
 const router = express.Router();
 const Line = require('../models/line')
 /*
-index will be line viewer
-/editior will be the editor
-
-trainer will be its own route
+line picker => 
+if(sideline) sideline picker =>
+trainer
 */
 router.get('/', checkAuthenticated, async (req, res) => {
 	res.render('trainers/index');
 });
 
+router.get('/sideline', checkAuthenticated, async (req, res) => {
+	res.render('trainers/index');
+});
 
+router.get('/movetrainer', checkAuthenticated, async (req, res) => {
+	res.render('trainers/index');
+});
 
 
 function checkAuthenticated(req, res, next) {

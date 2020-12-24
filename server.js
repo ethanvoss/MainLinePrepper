@@ -16,7 +16,7 @@ const session = require('express-session');
 initializePassport(passport);
 
 const indexRouter = require('./routes/index');
-const authorsRouter = require('./routes/authors');
+const trainerRouter = require('./routes/trainer');
 const linesRouter = require('./routes/lines');
 const usersRouter = require('./routes/users');
 
@@ -56,7 +56,7 @@ function checkAuthenticated(req, res, next) {
 }
 
 app.use('/', indexRouter);
-app.use('/authors', authorsRouter);
+app.use('/trainer', trainerRouter);
 app.use('/lines', linesRouter);
 app.use('/users', usersRouter);
 
