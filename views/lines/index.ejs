@@ -43,16 +43,32 @@
 	const lineIds = '<%= lineIds %>'.split(',');
 	const lineNames = '<%= lineNames %>'.split(',');
 	const lineStartingPositions = '<%= startingPositions %>'.split(',');
+	const lockedLines = '<%= lockedLines %>'.split(',');
+	const lockedLineParents = '<%= lockedLineParents %>'.split(',');
 	updateSideLines('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
 	<% if(locals.current) { %> 
 		for(var i in lineIds) {
 			if(lineIds[i] === '<%= current %>') {
 				document.getElementById('CurrentLineName').innerHTML += lineNames[i];
 				updateSideLines(lineStartingPositions[i]);
+				displayPopularMoves(lineStartingPositions[i]);
 				board.setPosition(lineStartingPositions[i]);
 				break;
 			}
 		}
+		for (var i in lockedLines)
+		{
+			if(lockedLines[i] == '<%= current %>') {
+				const parentDiv = document.getElementById('ParentLine');
+				const anchor = document.createElement('a');
+				const url = '/lines/editor?current=' + lockedLineParents[i];
+				anchor.setAttribute('href', url);
+				anchor.innerHTML = 'Parent Line';
+				parentDiv.appendChild(anchor);
+				break;
+			}
+		} 
+		
 
 	<% } %>
 	document.addEventListener('boardMove', function(e){
@@ -105,7 +121,7 @@
 			}
 		<% } %>
 	}
-	
+
 	<% if(locals.positions) { %>
 		const nextButton = document.getElementById('Next');
 		const backButton = document.getElementById('Back');
