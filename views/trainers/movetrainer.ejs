@@ -1,4 +1,8 @@
 <h1>Currently practicing <%= lineName %></h1>
+<% if(locals.sidelineName) { %>
+<h2>Sideline <%= sidelineName %></h2>
+<% } %>
+
 <script src='../public/scripts/board.js'></script>
 <link rel="stylesheet" href="../public/css/board.css">
 

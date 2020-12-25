@@ -71,9 +71,10 @@ router.get('/movetrainer', checkAuthenticated, async (req, res) => {
 	};
 	if(req.query.sideline)
 	{
-		const sideline = await Line.findOne({_id: req.query.sideline}, 'positions startingPosition').lean();
+		const sideline = await Line.findOne({_id: req.query.sideline}, 'positions startingPosition name').lean();
 		initObj.sidelinePositions = sideline.positions;
 		initObj.sidelineStartingPosition = sideline.startingPosition;
+		initObj.sidelineName = sideline.name;
 	}
 
 	
