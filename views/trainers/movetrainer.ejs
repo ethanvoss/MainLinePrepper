@@ -49,6 +49,7 @@
 	document.addEventListener('boardMove', async function(e){
 		console.log(board.getFen());
 		if(board.getFen() === positions[currentmove]) {
+			console.log('correct move');
 			//correct move
 			currentmove ++;
 
