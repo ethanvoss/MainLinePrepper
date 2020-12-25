@@ -44,14 +44,17 @@
 	<% } %>
 
 	var currentmove = 0;
+	console.log(positions);
+
 	document.addEventListener('boardMove', async function(e){
+		console.log(board.getFen());
 		if(board.getFen() === positions[currentmove]) {
 			//correct move
 			currentmove ++;
 
 			board.updateColors(correctColor, board.lightColor);
 			setTimeout(() => { board.resetColors(); }, 1000);
-			
+
 		}
 	})
 
