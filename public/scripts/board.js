@@ -168,6 +168,8 @@ class Board
 
 	}
 	updateColors(darkColor, lightColor) {
+		console.log(document.styleSheets);
+
 		if (!document.styleSheets) return;
 		var myCss = new Array();
 		var styleSheet;
@@ -178,6 +180,7 @@ class Board
 				styleSheet = sheet;
 		})
 		var index = styleSheets.indexOf(styleSheet);
+
 
 		if (document.styleSheets[index].cssRules)
 			myCss = document.styleSheets[index].cssRules
