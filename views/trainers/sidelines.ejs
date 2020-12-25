@@ -31,7 +31,7 @@
 
 	for(var i in sidelines) {
 		const linelink = document.createElement('a');
-		linelink.setAttribute('href', '/trainer/movetrainer?current=' + current + ' sideline=' + sidelines[i]);
+		linelink.setAttribute('href', '/trainer/movetrainer?current=' + current + '&sideline=' + sidelines[i]);
 		const title = document.createElement('h3');
 		title.innerHTML = sidelinenames[i];
 		linelink.appendChild(title);
