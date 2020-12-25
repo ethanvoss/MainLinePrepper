@@ -305,6 +305,7 @@ function dragElement(elmnt, board) {
 		e.preventDefault();
 	    // calculate the new cursor position:
 	    if(e.type == "touchmove") {
+	    	console.log(e);
 	    	pos1 = pos3 - e.touches[0].clientX;
 		    pos2 = pos4 - e.touches[0].clientY;
 		    pos3 = e.touches[0].clientX;
