@@ -284,8 +284,9 @@ function dragElement(elmnt, board) {
     // get the mouse cursor position at startup:
     console.log(e);
     if(e.type == 'touchstart') {
-    	pos3 = e.pageX;
-    	pos4 = e.pageY;
+    	console.log('is touch');
+    	pos3 = e.touches[0].clientX;
+    	pos4 = e.touches[0].clientY;
     } else {
 		pos3 = e.clientX;
 	    pos4 = e.clientY;
@@ -306,10 +307,10 @@ function dragElement(elmnt, board) {
 		e.preventDefault();
 	    // calculate the new cursor position:
 	    if(e.type == "touchmove") {
-	    	pos1 = pos3 - e.pageX;
-		    pos2 = pos4 - e.pageY;
-		    pos3 = e.pageX;
-		    pos4 = e.pageY;
+	    	pos1 = pos3 - e.e.touches[0].clientX;
+		    pos2 = pos4 - e.e.touches[0].clientY;
+		    pos3 = e.e.touches[0].clientX;
+		    pos4 = e.e.touches[0].clientY;
 	    } else {
 			pos1 = pos3 - e.clientX;
 		    pos2 = pos4 - e.clientY;
