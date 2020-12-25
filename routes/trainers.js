@@ -47,7 +47,10 @@ router.get('/sideline', checkAuthenticated, async (req, res) => {
 			}
 		}
 	})
+	const lineName = await Line.findOne({_id: selected}, 'name').lean();
+
 	const initObj = {
+		lineName: lineName.name,
 		current: selected,
 		sidelines: sidelines,
 		sidelinenames: sidelinenames
