@@ -268,6 +268,7 @@ const boardMove = new Event('boardMove');
 function dragElement(elmnt, board) {
 	var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 	elmnt.onmousedown = dragMouseDown;
+	elmnt.ontouchstart = dragMouseDown;
 	const scale = elmnt.style.width;  
 	const imgElmnt = elmnt.childNodes[0];
 	function dragMouseDown(e) {
@@ -275,12 +276,20 @@ function dragElement(elmnt, board) {
 		e.preventDefault();
     // get the mouse cursor position at startup:
     console.log(e);
-    pos3 = e.clientX;
-    pos4 = e.clientY;
+    if(e.type == 'touchstart') {
+    	pos3 = e.pageX;
+    	pos4 = e.pageY;
+    } else {
+		pos3 = e.clientX;
+	    pos4 = e.clientY;
+    }
+    
 
     document.onmouseup = closeDragElement;
+    document.ontouchend = closeDragElement;
     // call a function whenever the cursor moves:
     document.onmousemove = elementDrag;
+    document.touchmove = elementDrag;
 
 
 	}
@@ -289,10 +298,18 @@ function dragElement(elmnt, board) {
 		e = e || window.event;
 		e.preventDefault();
 	    // calculate the new cursor position:
-	    pos1 = pos3 - e.clientX;
-	    pos2 = pos4 - e.clientY;
-	    pos3 = e.clientX;
-	    pos4 = e.clientY;
+	    if(e.type == "touchmove") {
+	    	pos1 = pos3 - e.pageX;
+		    pos2 = pos4 - e.pageY;
+		    pos3 = e.pageX;
+		    pos4 = e.pageY;
+	    } else {
+			pos1 = pos3 - e.clientX;
+		    pos2 = pos4 - e.clientY;
+		    pos3 = e.clientX;
+		    pos4 = e.clientY;
+	    }
+	    
 	    // set the element's new position:
 	    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
 	    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
@@ -305,6 +322,8 @@ function dragElement(elmnt, board) {
 
 		document.onmouseup = null;
 		document.onmousemove = null;
+		document.touchend = null;
+		document.touchmove = null;
 
 	    //--Snap to square--//
 	    var dist = board.width;
