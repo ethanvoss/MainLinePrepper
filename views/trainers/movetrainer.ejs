@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="../public/css/board.css">
 
 <div id='parent' display='flex'>	
-	
+
 		<div id='boardDiv' float='left'>
 			<div id='board'></div>
 		</div>
@@ -14,6 +14,49 @@
 </div>
 
 <script>
-	const board = new Board({width: 400});
+	const correctColor = '#3ee63e';
+	const wrongColor = '#c41c14';
 	
+
+	const board = new Board({width: 400});
+	board.setPosition('<%= startingPosition %>');
+	const positions = [];
+	const linePositions = '<%= positions %>'.split(',');
+	<% if(locals.sidelinePositions) { %>
+		const sidelineBool = false;
+		for(var i in linePositions) {
+			const lineposition = linePositions[i];
+			if(lineposition === '<%= sidelineStartingPosition %>') {
+				sidelineBool = true;
+				break;
+			}
+			positions.push(lineposition);
+		}
+		const sidelinePositions = '<%= sidelinePositions %>'.split(',');
+		if(sidelineBool) {
+			for(var i in sidelinePositions) {
+				const lineposition = sidelinePositions[i];
+				positions.push(lineposition);
+			}
+		}
+	<% } else { %>
+		linePositions.forEach((lineposition) => { positions.push(lineposition); })
+	<% } %>
+
+	var currentmove = 0;
+	document.addEventListener('boardMove', async function(e){
+		if(board.getFen() === positions[currentmove]) {
+			//correct move
+			currentmove ++;
+
+			board.updateColors(correctColor, board.lightColor);
+			setTimeout(() => { board.resetColors(); }, 1000);
+			
+		}
+	})
+
+
+function wait(timer) {
+
+}
 </script>
