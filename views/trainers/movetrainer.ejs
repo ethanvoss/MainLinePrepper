@@ -3,18 +3,14 @@
 <link rel="stylesheet" href="../public/css/board.css">
 
 <div id='parent' display='flex'>	
-
-		<div id='boardDiv' float='left'>
-			<div id='board'></div>
-		</div>
-
+	<div id='boardDiv' float='left'>
+		<div id='board'></div>
 	</div>
-</div>
-
+	<button id='showAnswer' onclick='showMove()'>Show move</button>
 </div>
 
 <script>
-	const correctColor = '#3ee63e';
+	const correctColor = '#24852d';
 	const wrongColor = '#c41c14';
 	
 
@@ -58,8 +54,8 @@
 		}
 	})
 
-
-function wait(timer) {
-
-}
+	function showMove() {
+		currentmove++;
+		board.setPosition(positions[currentmove]);
+	}
 </script>
