@@ -295,7 +295,7 @@ function dragElement(elmnt, board) {
     document.ontouchend = closeDragElement;
     // call a function whenever the cursor moves:
     document.onmousemove = elementDrag;
-    document.touchmove = elementDrag;
+    document.ontouchmove = elementDrag;
 
 
 	}
