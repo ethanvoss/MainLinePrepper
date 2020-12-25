@@ -19,7 +19,7 @@
 	const positions = [];
 	const linePositions = '<%= positions %>'.split(',');
 	<% if(locals.sidelinePositions) { %>
-		const sidelineBool = false;
+		var sidelineBool = false;
 		for(var i in linePositions) {
 			const lineposition = linePositions[i];
 			if(lineposition === '<%= sidelineStartingPosition %>') {
