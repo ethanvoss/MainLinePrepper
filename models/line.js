@@ -27,7 +27,7 @@ const lineSchema = new mongoose.Schema({
 	},
 	side: {
 		type: String,
-		required, false
+		required: false
 	}
 })
 
