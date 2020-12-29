@@ -34,8 +34,9 @@ router.get('/', checkAuthenticated, async (req, res) => {
 	if(req.query.current)
 	{
 		initObj.current = req.query.current;
-		const positions = await Line.findOne({_id: req.query.current}, 'positions').lean();
-		initObj.positions = positions.positions; //this is a really stupid quirk of mongoose
+		const currentline = await Line.findOne({_id: req.query.current}, 'positions side').lean();
+		initObj.positions = currentline.positions;
+		if(currentline.side === 'black') initObj.side = 'black';
 	}
 	res.render('lines/index', initObj);
 });
@@ -71,8 +72,9 @@ router.get('/editor', checkAuthenticated, async (req, res) => {
 	if(req.query.current)
 	{
 		initObj.current = req.query.current;
-		const positions = await Line.findOne({_id: req.query.current}, 'positions').lean();
-		initObj.positions = positions.positions; //this is a really stupid quirk of mongoose
+		const currentline = await Line.findOne({_id: req.query.current}, 'positions side').lean();
+		initObj.positions = currentline.positions;
+		if(currentline.side === 'black') initObj.side = 'black';
 	}
 
 
@@ -111,6 +113,13 @@ router.post('/new', checkAuthenticated, async (req, res) => {
 router.post('/updatename', checkAuthenticated, async (req, res) => {
 	const lineId = req.body.id;
 	const update = {name: req.body.name};
+	await Line.findOneAndUpdate({_id: lineId}, update);
+	res.redirect('/lines/editor?current=' + lineId);
+});
+
+router.post('/updateside', checkAuthenticated, async (req, res) => {
+	const lineId = req.body.id;
+	const update = {side: req.body.side};
 	await Line.findOneAndUpdate({_id: lineId}, update);
 	res.redirect('/lines/editor?current=' + lineId);
 });

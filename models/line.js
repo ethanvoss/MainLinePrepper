@@ -24,6 +24,10 @@ const lineSchema = new mongoose.Schema({
 	transposable: {
 		type: Boolean,
 		required: false
+	},
+	side: {
+		type: String,
+		required, false
 	}
 })
 

@@ -34,7 +34,7 @@ class Board
 		this.updateColors(this.darkColor,this.lightColor);
 		
 		//update black orientation to be same as white
-		if(initObj.oritentation == 'black')
+		if(initObj.orientation == 'black')
 		{
 			for(var x = this.size - 1; x >= 0; x--)
 			{

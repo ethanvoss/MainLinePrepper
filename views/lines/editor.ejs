@@ -67,6 +67,12 @@
 		<input type='text' name='name' id='NameChangeInput'></input>
 		<button type='submit'>Submit Name</button>
 	</form>
+	<form action='/lines/updateside', method='POST'>
+		<input type='hidden' name='id' value='<%= current %>'></input>
+		<label>Change line's side</label>
+		<input type='text' name='side' id='SideChangeInput'></input>
+		<button type='submit'>Submit Side</button>
+	</form>
 </div>
 </div>
 <% } %>
@@ -86,7 +92,11 @@
 
 //bug: weird shit with castling is happening and the openings db display breaks after castling
 //openings db is doing too many requests //need to detect castling client side
+	<% if(locals.side) { %>
+	const board = new Board({width: 400, orientation: 'black'});
+	<% } else { %>	
 	const board = new Board({width: 400});
+	<% } %>
 	const lineIds = '<%= lineIds %>'.split(',');
 	const lineNames = '<%= lineNames %>'.split(',');
 	const lineStartingPositions = '<%= startingPositions %>'.split(',');
