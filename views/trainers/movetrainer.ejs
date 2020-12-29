@@ -65,15 +65,17 @@
 	})
 
 	function showMove() {
-		currentmove++;
-		board.setPosition(positions[currentmove]);
 		if(currentmove >= positions.length) endOfLine();
+		else {
+			currentmove++;
+			board.setPosition(positions[currentmove]);	
+		}
 	}
 
 	const endDisplay = document.getElementById('endDisplay');
 	console.log(endDisplay);
 	endDisplay.setAttribute('background', 'red');
-	
+
 	function endOfLine() {
 		endDisplay.setAttribute('background', 'blue');
 	}
