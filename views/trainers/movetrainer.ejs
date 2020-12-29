@@ -13,7 +13,7 @@
 	<button id='showAnswer' onclick='showMove()'>Show move</button>
 </div>
 
-<div id='endDisplay' display='none'>
+<div id='endDisplay'>
 	<h2>End of line</h2>
 	<button onClick="window.location.reload();">Practice again</button>
 </div>
@@ -70,8 +70,9 @@
 		if(currentmove >= positions.length) endOfLine();
 	}
 
+	const endDisplay = document.getElementById('endDisplay');
+	endDisplay.setAttribute('display', 'none');
 	function endOfLine() {
-		const endDisplay = document.getElementById('endDisplay');
 		endDisplay.setAttribute('display', 'block');
 	}
 </script>
