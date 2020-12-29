@@ -61,9 +61,11 @@
 			//correct move
 			currentmove ++;
 			board.updateColors(correctColor, board.lightColor);
+			
+			setTimeout(() => { board.resetColors(); }, 1000);
+
 			if(currentmove >= positions.length - 1) endOfLine();
 			else computerMove();
-			setTimeout(() => { board.resetColors(); }, 1000);
 		} else {
 			board.setPosition(positions[currentmove]);
 			board.updateColors(wrongColor, board.lightColor);
