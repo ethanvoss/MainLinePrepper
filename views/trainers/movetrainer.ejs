@@ -27,7 +27,8 @@
 		const side = 'white';
 	<% } %> 	
 
-	const board = new Board({width: 400});
+
+	const board = new Board({width: 400, orientation: side});
 	board.setPosition('<%= startingPosition %>');
 	const positions = [];
 	const linePositions = '<%= positions %>'.split(',');
