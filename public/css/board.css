@@ -6,7 +6,7 @@ div[class^="square"]{
 	float: left;
 	width: var(--square-size);
 	height: var(--square-size);
-	transition-duration: 0.3s;
+	transition-duration: 0.4s;
 }
 
 

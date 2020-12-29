@@ -63,14 +63,14 @@
 			currentmove ++;
 			board.updateColors(correctColor, board.lightColor);
 			
-			setTimeout(() => { board.resetColors(); }, 300);
+			setTimeout(() => { board.resetColors(); }, 600);
 
 			if(currentmove >= positions.length - 1) endOfLine();
 			else computerMove();
 		} else {
 			board.setPosition(positions[currentmove]);
 			board.updateColors(wrongColor, board.lightColor);
-			setTimeout(() => { board.resetColors(); }, 300);
+			setTimeout(() => { board.resetColors(); }, 600);
 		}
 	})
 
