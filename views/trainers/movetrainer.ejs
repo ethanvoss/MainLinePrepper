@@ -56,7 +56,7 @@
 			currentmove ++;
 			board.updateColors(correctColor, board.lightColor);
 			setTimeout(() => { board.resetColors(); }, 1000);
-			if(currentmove >= positions.length) endOfLine();
+			if(currentmove >= positions.length - 1) endOfLine();
 		} else {
 			board.setPosition(positions[currentmove]);
 			board.updateColors(wrongColor, board.lightColor);
@@ -65,7 +65,7 @@
 	})
 
 	function showMove() {
-		if(currentmove >= positions.length) endOfLine();
+		if(currentmove >= positions.length - 1) endOfLine();
 		else {
 			currentmove++;
 			board.setPosition(positions[currentmove]);	
