@@ -13,6 +13,11 @@
 	<button id='showAnswer' onclick='showMove()'>Show move</button>
 </div>
 
+<div id='endDisplay'>
+	<h2>End of line</h2>
+	<button onClick="window.location.reload();">Practice again</button>
+</div>
+
 <script>
 	const correctColor = '#24852d';
 	const wrongColor = '#c41c14';
@@ -51,6 +56,7 @@
 			currentmove ++;
 			board.updateColors(correctColor, board.lightColor);
 			setTimeout(() => { board.resetColors(); }, 1000);
+			if(currentmove >= positions.length) endOfLine();
 		} else {
 			board.setPosition(positions[currentmove]);
 			board.updateColors(wrongColor, board.lightColor);
@@ -61,5 +67,10 @@
 	function showMove() {
 		currentmove++;
 		board.setPosition(positions[currentmove]);
+		if(currentmove >= positions.length) endOfLine();
+	}
+
+	function endOfLine() {
+		const endDisplay = document.getElementById('endDisplay');
 	}
 </script>
