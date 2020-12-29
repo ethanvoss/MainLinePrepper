@@ -75,11 +75,9 @@ router.get('/editor', checkAuthenticated, async (req, res) => {
 		initObj.current = req.query.current;
 		const currentline = await Line.findOne({_id: req.query.current}, 'positions side').lean();
 		initObj.positions = currentline.positions;
-		const side = line.side || null;
+		const side = currentline.side || null;
 		if(side === 'black') initObj.side = 'black';
 	}
-
-
 	res.render('lines/editor', initObj);
 });
 
