@@ -70,8 +70,9 @@ router.get('/movetrainer', checkAuthenticated, async (req, res) => {
 		positions: positions
 	};
 
-	if(line.side === 'black') initObj.side = 'black';
-	
+	const side = line.side || null;
+	if(side === 'black') initObj.side = 'black';
+
 	if(req.query.sideline)
 	{
 		const sideline = await Line.findOne({_id: req.query.sideline}, 'positions startingPosition name').lean();
