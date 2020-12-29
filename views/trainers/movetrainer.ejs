@@ -21,7 +21,11 @@
 <script>
 	const correctColor = '#24852d';
 	const wrongColor = '#c41c14';
-	
+	<% if(locals.side) { %>
+		const side = 'black';
+	<% } else { %>
+		const side = 'white';
+	<% } %> 	
 
 	const board = new Board({width: 400});
 	board.setPosition('<%= startingPosition %>');
@@ -50,13 +54,16 @@
 
 	var currentmove = 0;
 
+	if(side == 'black') computerMove();
+
 	document.addEventListener('boardMove', async function(e){
 		if(board.getFen() == positions[currentmove + 1]) {
 			//correct move
 			currentmove ++;
 			board.updateColors(correctColor, board.lightColor);
-			setTimeout(() => { board.resetColors(); }, 1000);
 			if(currentmove >= positions.length - 1) endOfLine();
+			else computerMove();
+			setTimeout(() => { board.resetColors(); }, 1000);
 		} else {
 			board.setPosition(positions[currentmove]);
 			board.updateColors(wrongColor, board.lightColor);
@@ -67,8 +74,21 @@
 	function showMove() {
 		currentmove++;
 		if(currentmove >= positions.length - 1) endOfLine();
-		else
-		board.setPosition(positions[currentmove]);		
+		else {
+		board.setPosition(positions[currentmove]);
+		computerMove;
+		}		
+	}
+
+	function computerMove()
+	{
+		if(currentmove >= positions.length - 1) endOfLine();
+		else {
+			currentmove++;
+			if(currentmove >= positions.length - 1) endOfLine();
+			else
+			board.setPosition(positions[currentmove]);
+		}
 	}
 
 	const endDisplay = document.getElementById('endDisplay');
