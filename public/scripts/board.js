@@ -170,8 +170,6 @@ class Board
 
 	}
 	updateColors(darkColor, lightColor) {
-		console.log(document.styleSheets);
-
 		if (!document.styleSheets) return;
 		var myCss = new Array();
 		var styleSheet;
@@ -222,6 +220,7 @@ function genPiece(color, pieceIn, y, x, locked, board)
 
 function generatePosition(fen)
 {
+	console.log(fen);
 	var tempChess = new Chess(fen);
 	console.log(tempChess.board());
 		const fenAsArray = fen.split('/');
