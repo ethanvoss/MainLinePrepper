@@ -222,6 +222,8 @@ function genPiece(color, pieceIn, y, x, locked, board)
 
 function generatePosition(fen)
 {
+	var tempChess = new Chess(fen);
+	console.log(tempChess.board());
 		const fenAsArray = fen.split('/');
 		var positionOut = [];
 		for(var r in fenAsArray)
