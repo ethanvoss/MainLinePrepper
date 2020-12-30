@@ -1,10 +1,9 @@
-const { Chess } = require('./chess.js')
-var chess;
 const pieces = ['K','Q','R','B','N','P'];
 const collumConvert = ['a','b','c','d','e','f','g','h'];
 const rowConvert = ['8','7','6','5','4','3','2','1'];
 const rowFlipper = ['7','6','5','4','3','2','1','0'];
 const doc = document.documentElement;
+var chess;
 class Board
 {
 	//---Construct---//
@@ -14,7 +13,7 @@ class Board
 		this.size = initObj.size || 8;
 		this.locked = initObj.locked || false;
 		this.startingFen = initObj.startingFen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
-		ches = new Chess(this.startingFen);
+		chess = new Chess(this.startingFen);
 		const boardId = initObj.boardId || 'board';
 		this.board = document.getElementById(boardId);
 		this.position = [];
