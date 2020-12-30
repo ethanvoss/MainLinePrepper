@@ -16,7 +16,6 @@ class Board
 		chess = new Chess(this.startingFen);
 		const boardId = initObj.boardId || 'board';
 		this.board = document.getElementById(boardId);
-		this.position = [];
 		this.squares = [];
 		const ispercent = Array.from(this.width).includes('%');
 		if(ispercent){
@@ -90,17 +89,15 @@ class Board
 				}
 			}
 		}
-		
-		//---Generate position---//
-		this.position = generatePosition(this.startingFen);
-
 		//---Display the pieces---//
-		displayPieces(this.position, this.locked, this);
+		displayPieces(chess.board(), this.locked, this);
 	}
 
 	//---Move Function---//
 	move(move)
 	{
+		chess.move(move, { sloppy: true });
+
 		//----Code for e2-e4 format----//
 		var oldPos = move.split('-')[0].split('');
 		var newPos = move.split('-')[1].split('');
@@ -116,8 +113,6 @@ class Board
 		var piece = oldSquare.childNodes[0];
 		piece.remove();
 		newSquare.appendChild(piece);
-		board.position[y2][x2] = board.position[y1][x1];
-		board.position[y1][x1] = '0';
 
 		//---Capture---//
 		if(newSquare.childNodes.length > 1) //piece moved to square already holding a piece
@@ -132,10 +127,12 @@ class Board
 	}
 	getFen()
 	{
+		return chess.fen();
+		/*
 		var outgoing = "";
-		for(var r in this.position)
+		for(var r in chess.board())
 		{
-			var row = this.position[r];
+			var row = chess.board()[r];
 			var fenRow;
 			if(r > 0) fenRow = "/"; else fenRow = "";
 			var emptyCount = 0; 
@@ -155,18 +152,19 @@ class Board
 			outgoing += fenRow;
 		}
 		return outgoing;
+		*/
 	}
 	setPosition(fen)
 	{
 		//gen position
-		this.position = generatePosition(fen);
+		chess.load(fen);
 
 		///remove pieces from board
 		this.squares.forEach((square) => {
 			if(square.childNodes.length > 0) square.childNodes.forEach((child) => child.remove());
 		})
 		//replace pieces
-		displayPieces(this.position, this.locked, this);
+		displayPieces(chess.board(), this.locked, this);
 
 	}
 	updateColors(darkColor, lightColor) {
@@ -400,7 +398,7 @@ function dragElement(elmnt, board) {
 		    var x2; for(var i in collumConvert) if(i == newX) x2 = collumConvert[i];
 		    var y2; for(var i in rowConvert) if(i == newY) y2 = rowConvert[i];
 		    var move = x1 + y1 + '-' + x2 + y2;
-
+		    chess.move(move, { sloppy: true });
 		    //update position
 		    board.position[newY][newX] = board.position[oldY][oldX];
 		    board.position[oldY][oldX] = '0';
@@ -410,8 +408,6 @@ function dragElement(elmnt, board) {
 		    boardMove.newPos = newPos[0].toString() + newPos[1].toString();
 		    boardMove.newFen = board.getFen();
 		    document.dispatchEvent(boardMove);
-	    }
-
-	    
+	    }	    
 	}
 }
