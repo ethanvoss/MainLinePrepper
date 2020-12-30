@@ -257,8 +257,13 @@ function displayPieces(position, locked, board)
 		for(var c in row)
 		{
 			var lookingAt = row[c];
-			//find if lookingAt is a piece
+			if(lookingAt != null)
+			genPiece(lookingAt.color, lookingAt.type, r, c, locked, board);
+			
+
+			/*
 			pieces.forEach((piece) => {
+
 				if(lookingAt == piece) //white piece
 				{
 					genPiece('w', lookingAt, r, c, locked, board);
@@ -268,6 +273,7 @@ function displayPieces(position, locked, board)
 					genPiece('b', lookingAt, r, c, locked, board);
 				}
 			})
+			*/
 
 		}
 	}
