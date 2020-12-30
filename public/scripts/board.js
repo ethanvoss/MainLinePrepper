@@ -399,9 +399,6 @@ function dragElement(elmnt, board) {
 		    var y2; for(var i in rowConvert) if(i == newY) y2 = rowConvert[i];
 		    var move = x1 + y1 + '-' + x2 + y2;
 		    chess.move(move, { sloppy: true });
-		    //update position
-		    board.position[newY][newX] = board.position[oldY][oldX];
-		    board.position[oldY][oldX] = '0';
 
 		    boardMove.move = move;
 		    boardMove.oldPos = oldPos[0].toString() + oldPos[1].toString();
