@@ -12,7 +12,7 @@ class Board
 		this.width = initObj.width || 400;
 		this.size = initObj.size || 8;
 		this.locked = initObj.locked || false;
-		this.startingFen = initObj.startingFen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+		this.startingFen = initObj.startingFen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 		chess = new Chess(this.startingFen);
 		const boardId = initObj.boardId || 'board';
 		this.board = document.getElementById(boardId);
