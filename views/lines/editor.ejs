@@ -246,48 +246,7 @@
 		fetch(api).then((e) => {
 		  return data = e.json();
 		}).then((data) => {
-			if(data.moves.length < 1) {
-				const castlingSignifiers = ["-", "", "K","Q","k","q","KQ","Kk","Qk","Kq","Qq","kq","KQk","KQq","Kkq","Qkq","KQkq"];
-				var found = false;
-				castlingSignifiers.forEach((signifier) => {
-					if(!found) {
-						if(signifier == '-') signifier = 'w -';
-						var url = api + " " + signifier;
-						//console.log(url);
-						fetch(url).then((e) => {
-
-						  return data = e.json();
-						}).then((data) => {
-							if(data.moves.length >= 1)
-							{	
-								found = true;
-								updatePopularDisplay(data);
-								
-							} 
-						})
-					}
-				})
-				if(!found){
-					api += " b";
-					castlingSignifiers.forEach((signifier) => {
-						if(!found) {
-							var url = api + " " + signifier
-							fetch(url).then((e) => {
-							  return data = e.json();
-							}).then((data) => {
-								if(data.moves.length >= 1)
-								{
-									found = true;
-									updatePopularDisplay(data);
-									
-								} 
-							})
-						}
-					})
-				}
-				if(!found) document.getElementById('popularlines').innerHTML = 'no lines found';
-				//if(!found) console.log('something went wrong');
-			} else updatePopularDisplay(data);
+			updatePopularDisplay(data);
 		})
 		.catch(err => console.log(err));
 	}
