@@ -368,22 +368,7 @@ function dragElement(elmnt, board) {
 	    elmnt.style.top = targeted.style.top;
 	    if(JSON.stringify(oldPos) !== JSON.stringify(newPos))
 	    {
-	    	const piece = elmnt.childNodes[0].alt;
-	    	console.log(piece);
-	    	//---Castling---//
-	    	if(piece == 'K')
-	    	{
-	    		if(oldPos[0] - newPos[0] > 1) board.move('Kc1');
-	    		if(oldPos[0] - newPos[0] < -1) board.move('Kg1');
-
-
-	    	}
-	    	if(piece == 'k')
-	    	{
-	    		if(oldPos[0] - newPos[0] > 1) board.move('O-O-O');
-	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');	    		
-	    	}
-
+	    	
 
 		    //---Capture---//
 			if(targeted.childNodes.length > 1) //piece moved to square already holding a piece
@@ -405,6 +390,23 @@ function dragElement(elmnt, board) {
 		    var y2; for(var i in rowConvert) if(i == newY) y2 = rowConvert[i];
 		    var move = x1 + y1 + '-' + x2 + y2;
 		    chess.move(move, { sloppy: true });
+
+			const piece = elmnt.childNodes[0].alt;
+	    	console.log(piece);
+	    	//---Castling---//
+	    	if(piece == 'K')
+	    	{
+	    		if(oldPos[0] - newPos[0] > 1) board.move('Kc1');
+	    		if(oldPos[0] - newPos[0] < -1) board.move('Kg1');
+
+
+	    	}
+	    	if(piece == 'k')
+	    	{
+	    		if(oldPos[0] - newPos[0] > 1) board.move('O-O-O');
+	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');	    		
+	    	}
+
 
 		    boardMove.move = move;
 		    boardMove.oldPos = oldPos[0].toString() + oldPos[1].toString();
