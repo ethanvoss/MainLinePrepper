@@ -41,7 +41,7 @@ class Board
 
 					const square = document.createElement('div');
 					if(color % 2 == 0) square.setAttribute('class', 'squareDark');
-					else classname = square.setAttribute('class', 'squareLight');
+					else square.setAttribute('class', 'squareLight');
 
 					const id = y.toString() + x.toString();
 					square.setAttribute('id', id);
@@ -63,7 +63,7 @@ class Board
 
 					const square = document.createElement('div');
 					if(color % 2 == 0) square.setAttribute('class', 'squareDark');
-					else classname = square.setAttribute('class', 'squareLight');
+					else square.setAttribute('class', 'squareLight');
 
 					const id = y.toString() + x.toString();
 					square.setAttribute('id', id);
