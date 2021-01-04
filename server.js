@@ -19,7 +19,7 @@ const indexRouter = require('./routes/index');
 const trainerRouter = require('./routes/trainers');
 const linesRouter = require('./routes/lines');
 const usersRouter = require('./routes/users');
-
+const lichessRouter = require('./routes/lichess');
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -59,5 +59,6 @@ app.use('/', indexRouter);
 app.use('/trainer', trainerRouter);
 app.use('/lines', linesRouter);
 app.use('/users', usersRouter);
+app.use('/lichess', usersRouter);
 
 app.listen(process.env.PORT || 3000);
