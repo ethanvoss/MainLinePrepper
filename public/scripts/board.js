@@ -97,8 +97,11 @@ class Board
 	move(move)
 	{
 		chess.move(move, { sloppy: true });
+		this.squares.forEach((square) => {
+			if(square.childNodes.length > 0) square.childNodes.forEach((child) => child.remove());
+		})
 		displayPieces(chess.board(), this.locked, this);
-		
+
 		/*
 		//----Code for e2-e4 format----//
 		var oldPos = move.split('-')[0].split('');
