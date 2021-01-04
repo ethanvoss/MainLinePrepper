@@ -97,7 +97,9 @@ class Board
 	move(move)
 	{
 		chess.move(move, { sloppy: true });
+		displayPieces(chess.board(), this.locked, this);
 
+		/*
 		//----Code for e2-e4 format----//
 		var oldPos = move.split('-')[0].split('');
 		var newPos = move.split('-')[1].split('');
@@ -124,6 +126,7 @@ class Board
 			});
 			capturedPiece.remove();
 		}
+		*/
 	}
 	getFen()
 	{
