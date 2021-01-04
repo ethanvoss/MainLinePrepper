@@ -369,13 +369,13 @@ function dragElement(elmnt, board) {
 	    	//---Castling---//
 	    	if(piece == 'K')
 	    	{
-	    		if(oldPos[0] - newPos[0] > 1) board.move('a1-d1');
-	    		if(oldPos[0] - newPos[0] < -1) board.move('h1-f1');	    		
+	    		if(oldPos[0] - newPos[0] > 1) board.move('O-O-O');
+	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');	    		
 	    	}
 	    	if(piece == 'k')
 	    	{
-	    		if(oldPos[0] - newPos[0] > 1) board.move('a8-d8');
-	    		if(oldPos[0] - newPos[0] < -1) board.move('h8-f8');	    		
+	    		if(oldPos[0] - newPos[0] > 1) board.move('O-O-O');
+	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');	    		
 	    	}
 
 
