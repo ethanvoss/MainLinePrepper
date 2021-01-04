@@ -72,7 +72,8 @@
 	<form action='/lines/updateside', method='POST'>
 		<input type='hidden' name='id' value='<%= current %>'></input>
 		<label>Change line's side</label>
-		<input type='text' name='side' id='SideChangeInput'></input>
+		<input type='radio' name='white' id='SideChangeInput'>White</input>
+		<input type='radio' name='black' id='SideChangeInput'>Black</input>
 		<button type='submit'>Submit Side</button>
 	</form>
 </div>
