@@ -72,8 +72,10 @@
 	<form action='/lines/updateside', method='POST'>
 		<input type='hidden' name='id' value='<%= current %>'></input>
 		<label>Change line's side</label>
-		<input type='radio' name='white' value='white' id='SideChangeInput'>White</input>
-		<input type='radio' name='black' value='black' id='SideChangeInput'>Black</input>
+		<input type='radio' name='side' value='white' id='sideChangeWhite'></input>  
+		<label for="sideChangeWhite" display='inline-block'>White</label>
+		<input type='radio' name='side' value='black' id='sideChangeBlack'></input>
+		<label for="sideChangeBlack" display='inline-block'>Black</label>
 		<button type='submit'>Submit Side</button>
 	</form>
 </div>
