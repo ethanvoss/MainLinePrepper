@@ -366,11 +366,14 @@ function dragElement(elmnt, board) {
 	    if(JSON.stringify(oldPos) !== JSON.stringify(newPos))
 	    {
 	    	const piece = elmnt.childNodes[0].alt;
+	    	console.log(piece);
 	    	//---Castling---//
 	    	if(piece == 'K')
 	    	{
-	    		if(oldPos[0] - newPos[0] > 1) board.move('O-O-O');
-	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');	    		
+	    		if(oldPos[0] - newPos[0] > 1) board.move('Kc1');
+	    		if(oldPos[0] - newPos[0] < -1) board.move('Kg1');
+
+
 	    	}
 	    	if(piece == 'k')
 	    	{
