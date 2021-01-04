@@ -389,23 +389,24 @@ function dragElement(elmnt, board) {
 		    var x2; for(var i in collumConvert) if(i == newX) x2 = collumConvert[i];
 		    var y2; for(var i in rowConvert) if(i == newY) y2 = rowConvert[i];
 		    var move = x1 + y1 + '-' + x2 + y2;
-		    chess.move(move, { sloppy: true });
+		    
 
 			const piece = elmnt.childNodes[0].alt;
 	    	console.log(piece);
 	    	//---Castling---//
 	    	if(piece == 'K')
 	    	{
-	    		if(oldPos[0] - newPos[0] > 1) board.move('Kc1');
-	    		if(oldPos[0] - newPos[0] < -1) board.move('Kg1');
+	    		if(oldPos[0] - newPos[0] > 1) board.move('O-O-O');
+	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');
 
 
-	    	}
+	    	} else
 	    	if(piece == 'k')
 	    	{
 	    		if(oldPos[0] - newPos[0] > 1) board.move('O-O-O');
 	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');	    		
-	    	}
+	    	} else chess.move(move, { sloppy: true });
+
 
 
 		    boardMove.move = move;
