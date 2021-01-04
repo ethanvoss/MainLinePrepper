@@ -98,7 +98,7 @@ class Board
 	{
 		chess.move(move, { sloppy: true });
 		displayPieces(chess.board(), this.locked, this);
-
+		
 		/*
 		//----Code for e2-e4 format----//
 		var oldPos = move.split('-')[0].split('');
@@ -405,7 +405,7 @@ function dragElement(elmnt, board) {
 	    	{
 	    		if(oldPos[0] - newPos[0] > 1) board.move('O-O-O');
 	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');	    		
-	    	} else chess.move(move, { sloppy: true });
+	    	} else board.move(move);
 
 
 
