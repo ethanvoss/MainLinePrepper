@@ -10,7 +10,6 @@ class Board
 	constructor(initObj)
 	{
 		this.width = initObj.width || 400;
-		this.size = initObj.size || 8;
 		this.locked = initObj.locked || false;
 		this.startingFen = initObj.startingFen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 		chess = new Chess(this.startingFen);
@@ -27,7 +26,7 @@ class Board
 
 		//---Generates Board---///
 		var color = 0;
-		var squareSize = this.width / this.size;
+		var squareSize = this.width / 8;
 		doc.style.setProperty('--square-size', squareSize + "px");
 		this.darkColor = initObj.darkColor || "#1e4a66";
 		this.lightColor = initObj.lightColor || "#fcfcfc";
@@ -35,23 +34,15 @@ class Board
 		this.updateColors(this.darkColor,this.lightColor);
 		
 		//update black orientation to be same as white
-		if(initObj.orientation == 'black')
-		{
-			for(var x = this.size - 1; x >= 0; x--)
-			{
-				for(var y = this.size - 1; y >= 0; y--)
-				{
-					if(y == this.size - 1) color++;
-
-					var classname;
-					if(color % 2 == 0) classname = 'squareDark';
-					else classname = 'squareLight';
+		if(initObj.orientation == 'black') {
+			for(var x = 7; x >= 0; x--) {
+				for(var y = 7; y >= 0; y--) {
+					if(y == 7) color++;
 
 					const square = document.createElement('div');
+					if(color % 2 == 0) square.setAttribute('class', 'squareDark');
+					else classname = square.setAttribute('class', 'squareLight');
 
-					square.setAttribute('class', classname);
-					//square.style.background = backgroundColor;
-					//if(x == 7) square.style.display = "inline";
 					const id = y.toString() + x.toString();
 					square.setAttribute('id', id);
 
@@ -64,21 +55,16 @@ class Board
 		}
 		else
 		{
-			for(var x = 0; x < this.size; x++)
+			for(var x = 0; x < 8; x++)
 			{
-				for(var y = 0; y < this.size; y++)
+				for(var y = 0; y < 8; y++)
 				{
 					if(y == 0) color++;
 
-					var classname;
-					if(color % 2 == 0) classname = 'squareDark';
-					else classname = 'squareLight';
-
 					const square = document.createElement('div');
+					if(color % 2 == 0) square.setAttribute('class', 'squareDark');
+					else classname = square.setAttribute('class', 'squareLight');
 
-					square.setAttribute('class', classname);
-					//square.style.background = backgroundColor;
-					if(x == this.size - 1) square.style.display = "inline";
 					const id = y.toString() + x.toString();
 					square.setAttribute('id', id);
 
@@ -101,64 +87,10 @@ class Board
 			if(square.childNodes.length > 0) square.childNodes.forEach((child) => child.remove());
 		})
 		displayPieces(chess.board(), this.locked, this);
-
-		/*
-		//----Code for e2-e4 format----//
-		var oldPos = move.split('-')[0].split('');
-		var newPos = move.split('-')[1].split('');
-
-		var x1, y1;
-		for(var i in collumConvert) if(collumConvert[i] == oldPos[0]) x1 = i;
-		for(var i in rowConvert) if(rowConvert[i] == oldPos[1]) y1 = i;
-		var x2, y2;
-		for(var i in collumConvert) if(collumConvert[i] == newPos[0]) x2 = i;
-		for(var i in rowConvert) if(rowConvert[i] == newPos[1]) y2 = i;
-		var oldSquare = document.getElementById(x1.toString() + y1);
-		var newSquare = document.getElementById(x2.toString() + y2);
-		var piece = oldSquare.childNodes[0];
-		piece.remove();
-		newSquare.appendChild(piece);
-
-		//---Capture---//
-		if(newSquare.childNodes.length > 1) //piece moved to square already holding a piece
-		{
-			var children = Array.from(newSquare.childNodes);
-			var capturedPiece;
-			children.forEach((heldPiece) => {
-				if(heldPiece != piece) capturedPiece = heldPiece;
-			});
-			capturedPiece.remove();
-		}
-		*/
 	}
 	getFen()
 	{
 		return chess.fen();
-		/*
-		var outgoing = "";
-		for(var r in chess.board())
-		{
-			var row = chess.board()[r];
-			var fenRow;
-			if(r > 0) fenRow = "/"; else fenRow = "";
-			var emptyCount = 0; 
-			row.forEach(squareValue => {
-				if(squareValue === "0") emptyCount++;
-				else
-				{
-					if(emptyCount > 0) 
-					{
-						fenRow += emptyCount.toString();
-						emptyCount = 0;
-					}
-					fenRow += squareValue;
-				}
-			})
-			if(emptyCount > 0) fenRow += emptyCount.toString();
-			outgoing += fenRow;
-		}
-		return outgoing;
-		*/
 	}
 	setPosition(fen)
 	{
@@ -227,31 +159,6 @@ function generatePosition(fen)
 	var tempChess = new Chess(fen);
 	console.log(tempChess.board());
 	return tempChess.board();
-
-
-	/*
-		const fenAsArray = fen.split('/');
-		var positionOut = [];
-		for(var r in fenAsArray)
-		{
-			var row = fenAsArray[r].split('');
-			var rowOut = [];
-			row.forEach((lookingAt) => {
-				const isPiece = pieces.some((piece) => {return piece == lookingAt.toUpperCase()});
-				if(isPiece) rowOut.push(lookingAt); 
-				else 
-				{
-					var timesToPush = parseInt(lookingAt);
-					for(var i = 0; i < timesToPush; i++)
-					{
-						rowOut.push('0');
-					}
-				}
-			})
-			positionOut.push(rowOut);
-		}
-	return positionOut;
-	*/
 }
 function displayPieces(position, locked, board)
 {
@@ -263,29 +170,10 @@ function displayPieces(position, locked, board)
 			var lookingAt = row[c];
 			if(lookingAt != null)
 			genPiece(lookingAt.color, lookingAt.type, r, c, locked, board);
-			
-
-			/*
-			pieces.forEach((piece) => {
-
-				if(lookingAt == piece) //white piece
-				{
-					genPiece('w', lookingAt, r, c, locked, board);
-				}else
-				if(lookingAt.toUpperCase() == piece) //black piece
-				{
-					genPiece('b', lookingAt, r, c, locked, board);
-				}
-			})
-			*/
-
 		}
 	}
 
 }
-
-
-const boardMove = new Event('boardMove');
 
 //---Make Pieces Draggable---//
 
@@ -313,8 +201,6 @@ function dragElement(elmnt, board) {
     // call a function whenever the cursor moves:
     document.onmousemove = elementDrag;
     document.ontouchmove = elementDrag;
-
-
 	}
 
 	function elementDrag(e) {
@@ -333,8 +219,7 @@ function dragElement(elmnt, board) {
 		    pos2 = pos4 - e.clientY;
 		    pos3 = e.clientX;
 		    pos4 = e.clientY;
-	    }
-	    
+	    } 
 	    // set the element's new position:
 	    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
 	    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
@@ -342,7 +227,6 @@ function dragElement(elmnt, board) {
 
 	function closeDragElement() {
 		/* stop moving when mouse button is released: */
-
 		elmnt.appendChild(imgElmnt);
 
 		document.onmouseup = null;
@@ -410,7 +294,7 @@ function dragElement(elmnt, board) {
 	    		if(oldPos[0] - newPos[0] < -1) board.move('O-O');	    		
 	    	} else board.move(move);
 
-
+			const boardMove = new Event('boardMove');
 
 		    boardMove.move = move;
 		    boardMove.oldPos = oldPos[0].toString() + oldPos[1].toString();
