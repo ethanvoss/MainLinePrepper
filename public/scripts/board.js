@@ -112,9 +112,9 @@ class Board
 		const styleSheets = Array.from(document.styleSheets);
 
 		styleSheets.forEach((sheet) => {
-			if(sheet.href == 'https://mainlinetrainer.herokuapp.com/public/css/board.css')
+			if(sheet.href == 'https://vosstech.herokuapp.com/public/css/board.css')
 				styleSheet = sheet;
-			if(sheet.href == 'http://mainlinetrainer.herokuapp.com/public/css/board.css')
+			if(sheet.href == 'http://vosstech.herokuapp.com/public/css/board.css')
 				styleSheet = sheet;
 		})
 
