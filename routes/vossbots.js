@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', checkAuthenticated, (req, res) => {
-	res.render('index');
+	res.render('/index');
 });
 
 router.post('/getmove', (req, res) => {
