@@ -6,13 +6,13 @@
 <div id='parent' display='flex'>
 	<div id='boardDiv' float='left'>
 		<div id='board'></div>
-		<button id='Back' class='BoardButton'>Back</button>
-		<button id='Next' class='BoardButton nextButton' float='right'>Next</button>
 	</div>
 </div>
 
 <script>
 
-	const board = new Board({width: 400, locked: true});
+	const board = new Board({width: 400});
+
+	console.log(fetch('https://vosstech.herokuapp.com/vossbot/getmove'));
 
 </script>
