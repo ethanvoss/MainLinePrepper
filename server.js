@@ -20,6 +20,7 @@ const trainerRouter = require('./routes/trainers');
 const linesRouter = require('./routes/lines');
 const usersRouter = require('./routes/users');
 const lichessRouter = require('./routes/lichess');
+const vossbotsRouter = require('./routes/vossbots')
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -60,5 +61,6 @@ app.use('/trainer', trainerRouter);
 app.use('/lines', linesRouter);
 app.use('/users', usersRouter);
 app.use('/lichess', usersRouter);
+app.use('/vossbot', vossbotsRouter);
 
 app.listen(process.env.PORT || 3000);
