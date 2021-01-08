@@ -107,6 +107,7 @@ router.post('/new', checkAuthenticated, async (req, res) => {
 	{
 		line.transposable = false;
 		const parentLine = Line.findOne({ _id: line.parentLine }).lean();
+		console.log(`Parent line: ${parentLine}`);
 		if(parentLine.side === 'black') line.side = 'black';
 	}
 		
