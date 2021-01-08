@@ -103,7 +103,13 @@ router.post('/new', checkAuthenticated, async (req, res) => {
 		startingPosition: req.body.startingPosition
 	});
 	if(req.body.parent) line.parentLine = req.body.parent;
-	if(req.body.sidelineindicator) line.transposable = false;
+	if(req.body.sidelineindicator) 
+	{
+		line.transposable = false;
+		const parentLine = Line.findOne({ _id: line.parentLine }).lean();
+		if(parentLine.side === 'black') line.side = 'black';
+	}
+		
 	await line.save();
 	var url = '/lines/editor?current=' + line._id;
 	res.redirect(url);
