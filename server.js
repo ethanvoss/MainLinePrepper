@@ -12,7 +12,8 @@ const initializePassport = require('./passport-config');
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
-// const users = [];
+const MemoryStore = require('memorystore')(session);
+
 initializePassport(passport);
 
 const indexRouter = require('./routes/index');
@@ -31,6 +32,10 @@ app.use("/public", express.static('public'))
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false}));
 app.use(flash());
 app.use(session({
+	cookie: { maxAge: 86400000 },
+	store: new MemoryStore({
+      checkPeriod: 86400000 // prune expired entries every 24h
+    }),
 	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false
