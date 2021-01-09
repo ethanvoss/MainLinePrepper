@@ -35,7 +35,9 @@ router.get('/getmove', (req, res) => {
 		var highest = moves[0];
 		if(depth1Chess.turn() === 'b') eval *= -1;
 		moves.forEach((currentMove) => {
+			console.log(`comapring ${JSON.stringify(currentMove)} to ${JSON.stringify(highest)}`)
 			if(currentMove.eval > highest.eval) highest = currentMove;
+			console.log(`${JSON.stringify(highest)} is best`);
 		});
 		console.log(`sending ${JSON.stringify(highest)}`);
 		res.send(highest.move);
