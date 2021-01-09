@@ -19,7 +19,7 @@
 		fetch(fetchUrl).then((res) => {
 			return res.text();
 		}).then((data) => {
-			console.log(data);
+			console.log(data.move);
 			board.move(data.move);
 		});
 	})
