@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Chess } = require('./chess.js')
+const { Chess } = require('chess.js')
 const chess = new Chess()
 
 router.get('/', checkAuthenticated, (req, res) => {
