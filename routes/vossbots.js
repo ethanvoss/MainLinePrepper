@@ -17,7 +17,7 @@ router.get('/getmove', (req, res) => {
 		const depth1Chess = new Chess(req.query.fen);
 		const moves = [];
 		depth1Chess.moves().forEach((move) => {
-			const tempChess = depth1Chess;
+			const tempChess = new Chess(req.query.fen);
 			tempChess.move(move);
 			console.log(tempChess.ascii());
 			var eval = 0;
