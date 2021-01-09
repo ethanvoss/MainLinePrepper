@@ -19,6 +19,7 @@ router.get('/getmove', (req, res) => {
 		depth1Chess.moves().forEach((move) => {
 			const tempChess = depth1Chess;
 			tempChess.move(move);
+			console.log(tempChess.ascii());
 			var eval = 0;
 			tempChess.board().forEach((row) => {
 				row.forEach((piece) => {
@@ -27,7 +28,7 @@ router.get('/getmove', (req, res) => {
 						var evalAdd = pieceValueObj.value;
 						if(piece.color === 'b') evalAdd *= -1;
 						eval += evalAdd;
-						console.log(`added ${evalAdd}`);
+
 					}
 				})
 			});
