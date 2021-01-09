@@ -35,9 +35,9 @@ router.get('/getmove', (req, res) => {
 		})
 		var highest = moves[0];
 		if(depth1Chess.turn() === 'b') eval *= -1;
-		moves.forEach(currentMove) => {
+		moves.forEach((currentMove) => {
 			if(currentMove.eval > highest.eval) highest = currentMove;
-		})
+		});
 		res.send(highest);
 	} else {
 		res.send('Bee bee boo beep i cant find a move');
