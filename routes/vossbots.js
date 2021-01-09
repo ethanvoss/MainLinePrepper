@@ -14,7 +14,7 @@ router.get('/getmove', (req, res) => {
 		const depth1Chess = new Chess(req.query.fen);
 		const moves = [];
 		boardMoves = depth1Chess.moves();
-		forEach((move) => {
+		boardMoves.forEach((move) => {
 			console.log(`Move ${move}`);
 		})
 		//const depth = req.query.depth || 5;
