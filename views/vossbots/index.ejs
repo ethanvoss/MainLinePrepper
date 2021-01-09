@@ -13,8 +13,10 @@
 
 	const board = new Board({width: 400});
 
-	fetch('https://vosstech.herokuapp.com/vossbot/getmove').then(res => {
-		console.log(res.text());
+	fetch('https://vosstech.herokuapp.com/vossbot/getmove').then((res) => {
+		return res.text();
+	}).then((data) => {
+		console.log(data);
 	});
 
 </script>

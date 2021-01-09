@@ -6,6 +6,10 @@ router.get('/', checkAuthenticated, (req, res) => {
 });
 
 router.post('/getmove', (req, res) => {
+	//To do: generate all possible moves for a given depth. => eval moves. => return best move
+
+
+
 	res.send('yo home slice');
 })
 
