@@ -12,9 +12,6 @@ router.get('/getmove', (req, res) => {
 	//pick best move based on what move ends in the highest low or highest of the worst outcomes
 
 	if(req.query.fen) {
-		const values = [{piece: 'k', value: 900},{piece: 'q', value: 90},{piece: 'r', value: 50},{piece: 'b', value: 30},{piece: 'n', value: 30},{piece: 'p', value: 10}];
-
-		
 		//const depth = req.query.depth || 5;
 		const depth = 5;
 		var previousPositions = [{fen: req.query.fen}];
@@ -57,6 +54,7 @@ router.get('/getmove', (req, res) => {
 	}
 
 	function evaluateBoard(board) {
+		const values = [{piece: 'k', value: 900},{piece: 'q', value: 90},{piece: 'r', value: 50},{piece: 'b', value: 30},{piece: 'n', value: 30},{piece: 'p', value: 10}];
 		var eval = 0;
 		board.forEach((row) => {
 			row.forEach((piece) => {
