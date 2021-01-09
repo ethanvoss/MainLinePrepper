@@ -13,38 +13,60 @@ router.get('/getmove', (req, res) => {
 	if(req.query.fen) {
 		const values = [{piece: 'k', value: 900},{piece: 'q', value: 90},{piece: 'r', value: 50},{piece: 'b', value: 30},{piece: 'n', value: 30},{piece: 'p', value: 10}];
 
-
-		const depth1Chess = new Chess(req.query.fen);
-		const moves = [];
-		depth1Chess.moves().forEach((move) => {
-			const tempChess = new Chess(req.query.fen);
-			tempChess.move(move);
-			console.log(tempChess.ascii());
-			var eval = 0;
-			tempChess.board().forEach((row) => {
-				row.forEach((piece) => {
-					if(piece !== null) {
-						var pieceValueObj = values.find((value) => { return value.piece === piece.type });
-						var evalAdd = pieceValueObj.value;
-						if(piece.color === 'b') evalAdd *= -1;
-						eval += evalAdd;
-
-					}
+		
+		//const depth = req.query.depth || 5;
+		const depth = 5;
+		var previousPositions = [{fen: req.query.fen}];
+		const depthChess = new Chess();
+		for(var i = 0; i <= depth; i++)
+		{
+			var newPositions = [];
+			previousPositions.forEach((previousPosition) => {
+				depthChess.load(previousPosition.fen);
+				const moves = depthChess.moves();
+				moves.forEach((move) => {
+					depthChess.load(previousPosition.fen);
+					depthChess.move(move);
+					const eval = evaluateBoard(depthChess.board());
+					if(i === depth) {
+						const isNewHigh = previousPositions.some((prev) => {
+							if(depthChess.turn() === 'b') {
+								return prev.eval >= eval;
+							} else {
+								return prev.eval <= eval;
+							}
+						});
+						if(isNewHigh) newPositions.push({fen: depthChess.fen(), eval: eval, move: move});
+					} else
+					newPositions.push({fen: depthChess.fen(), eval: eval, move: move});
 				})
-			});
-			if(depth1Chess.turn() === 'b') eval *= -1;
-			moves.push({eval: eval, move: move});
+			})
+			previousPositions = newPositions;
+		}
+		depthChess.load(req.query.fen);
+		var side = 1;
+		if(depthChess.turn() === 'b') side = -1;
+		var bestMove = previousPositions[Math.floor(Math.random() * Math.floor(previousPositions.length));];
+		previousPositions.forEach((previousPosition) => {
+			if(previousPosition.eval * side > bestMove.eval * side) bestMove = previousPosition;
 		})
-		var highest = moves[0];
-		moves.forEach((currentMove) => {
-			console.log(`comapring ${JSON.stringify(currentMove)} to ${JSON.stringify(highest)}`)
-			if(currentMove.eval > highest.eval) highest = currentMove;
-			console.log(`${JSON.stringify(highest)} is best`);
-		});
-		console.log(`sending ${JSON.stringify(highest)}`);
-		res.send(highest.move);
 	} else {
 		res.send('Bee bee boo beep i cant find a move');
+	}
+
+	function evaluateBoard(board) {
+		var eval = 0;
+		board.forEach((row) => {
+			row.forEach((piece) => {
+				if(piece !== null) {
+					var pieceValueObj = values.find((value) => { return value.piece === piece.type });
+					var evalAdd = pieceValueObj.value;
+					if(piece.color === 'b') evalAdd *= -1;
+					eval += evalAdd;
+				}
+			})
+		});
+		return eval;
 	}	
 })
 
