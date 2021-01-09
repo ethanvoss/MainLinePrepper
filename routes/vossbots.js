@@ -11,15 +11,32 @@ router.get('/getmove', (req, res) => {
 	//To do: generate all possible moves for a given depth. => eval moves. => return best move
 
 	if(req.query.fen) {
+		const values = [{piece: 'k', value: 900},{piece: 'q', value: 90},{piece: 'r', value: 50},{piece: 'b', value: 30},{piece: 'n', value: 30},{piece: 'p', value: 10}];
+
+
 		const depth1Chess = new Chess(req.query.fen);
 		const moves = [];
-		boardMoves = depth1Chess.moves();
-		boardMoves.forEach((move) => {
-			console.log(`Move ${move}`);
+		depth1Chess.moves().forEach((move) => {
+			const tempChess = depth1Chess;
+			tempChess.move(move);
+			var eval = 0;
+			tempChess.board().forEach((row) => {
+				row.forEach((piece) => {
+					if(piece !== null) {
+						var pieceValueObj = values.find((value) => { return value.piece === piece.type });
+						var evalAdd = pieceValueObj.value;
+						if(piece.color === 'b') evalAdd *= -1;
+						eval += evalAdd;
+					}
+				})
+			});
+
+			moves.push({eval: eval, move: move});
 		})
-		//const depth = req.query.depth || 5;
-		//const moves = [];
-		res.send('im not sure');
+		const moveToSend = moves.reduce((highest, currentMove) => {
+			if(currentMove.eval > highest.eval) highest = currentMove;
+		})
+		res.send(moveToSend);
 	} else {
 		res.send('Bee bee boo beep i cant find a move');
 	}	
