@@ -30,8 +30,10 @@ router.get('/getmove', (req, res) => {
 					}
 				})
 			});
-
-			moves.push({eval: eval, move: move});
+			toPush = {};
+			toPush.eval = eval;
+			toPush.move = move;
+			moves.push(toPush);
 		})
 		var highest = moves[0];
 		if(depth1Chess.turn() === 'b') eval *= -1;
