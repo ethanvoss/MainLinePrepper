@@ -27,6 +27,7 @@ router.get('/getmove', (req, res) => {
 						var evalAdd = pieceValueObj.value;
 						if(piece.color === 'b') evalAdd *= -1;
 						eval += evalAdd;
+						console.log(`added ${evalAdd}`);
 					}
 				})
 			});
