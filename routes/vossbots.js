@@ -13,40 +13,42 @@ router.get('/getmove', (req, res) => {
 
 	if(req.query.fen) {
 		//const depth = req.query.depth || 5;
-		const depth = 1;
-		var previousPositions = [{fen: req.query.fen}];
-		const depthChess = new Chess();
-		for(var i = 0; i <= depth; i++)
-		{
-			var newPositions = [];
-			previousPositions.forEach((previousPosition) => {
-				depthChess.load(previousPosition.fen);
-				const moves = depthChess.moves();
-				moves.forEach((move) => {
-					depthChess.load(previousPosition.fen);
-					depthChess.move(move);
-					const eval = evaluateBoard(depthChess.board());
-					if(i === depth) {
-						const isNewHigh = previousPositions.some((prev) => {
-							if(depthChess.turn() === 'b') {
-								return prev.eval >= eval;
-							} else {
-								return prev.eval <= eval;
-							}
-						});
-						if(isNewHigh) newPositions.push({fen: depthChess.fen(), eval: eval, move: move});
-					} else
-					newPositions.push({fen: depthChess.fen(), eval: eval, move: move});
+		const depth = 3;
+		const depthChess = new Chess(req.query.fen);
+		const moves = depthChess.moves();
+		const movesWithEval = [];
+		const side = depthChess.turn();
+		moves.forEach((move) => {
+			depthChess.load(req.query.fen);
+			depthChess.move(move);
+			var previousPositions = [{fen: depthChess.fen()}];
+			for(var i = 1; i <= depth; i++) {
+				var newPositions = [];
+				previousPositions.forEach((position) => {
+					depthChess.load(position.fen);
+					const newMoves = depthChess.moves();
+					newMoves.forEach((newMove) => {
+						depthChess.load(position.fen);
+						depthChess.move(newMove);
+						const eval = evaluateBoard(depthChess.board());
+						newPositions.push({fen: depthChess.fen(), eval: eval});
+					})
 				})
+				previousPositions = newPositions;
+			}
+			var sideMult = 1;
+			if(side === 'b') sideMult *= -1;
+			var worstEval = previousPositions[0];
+			previousPositions.forEach((previousPosition) => {
+				if(previousPosition.eval * sideMult < worstEval.eval * sideMult) worstEval = previousPosition;
 			})
-			previousPositions = newPositions;
-		}
-		depthChess.load(req.query.fen);
-		var side = 1;
-		if(depthChess.turn() === 'b') side = -1;
-		var bestMove = previousPositions[Math.floor(Math.random() * Math.floor(previousPositions.length))];
-		previousPositions.forEach((previousPosition) => {
-			if(previousPosition.eval * side > bestMove.eval * side) bestMove = previousPosition;
+			movesWithEval.push({move: move, eval: worstEval.eval});
+		})
+		var sideMult = 1;
+		if(side === 'b') sideMult *= -1;
+		var bestMove = movesWithEval[0];
+		movesWithEval.forEach((m) => {
+			if(m.eval * sideMult > bestMove.eval) bestMove = m;
 		})
 		res.send(bestMove.move);
 	} else {
