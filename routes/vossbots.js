@@ -9,6 +9,7 @@ router.get('/', checkAuthenticated, (req, res) => {
 
 router.get('/getmove', (req, res) => {
 	//To do: generate all possible moves for a given depth. => eval moves. => return best move
+	//pick best move based on what move ends in the highest low or highest of the worst outcomes
 
 	if(req.query.fen) {
 		const values = [{piece: 'k', value: 900},{piece: 'q', value: 90},{piece: 'r', value: 50},{piece: 'b', value: 30},{piece: 'n', value: 30},{piece: 'p', value: 10}];
@@ -46,10 +47,11 @@ router.get('/getmove', (req, res) => {
 		depthChess.load(req.query.fen);
 		var side = 1;
 		if(depthChess.turn() === 'b') side = -1;
-		var bestMove = previousPositions[Math.floor(Math.random() * Math.floor(previousPositions.length));];
+		var bestMove = previousPositions[Math.floor(Math.random() * Math.floor(previousPositions.length))];
 		previousPositions.forEach((previousPosition) => {
 			if(previousPosition.eval * side > bestMove.eval * side) bestMove = previousPosition;
 		})
+		res.send(bestMove.move);
 	} else {
 		res.send('Bee bee boo beep i cant find a move');
 	}
