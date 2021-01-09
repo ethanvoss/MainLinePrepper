@@ -13,7 +13,7 @@ router.get('/getmove', (req, res) => {
 	if(req.query.fen) {
 		const depth1Chess = new Chess(req.query.fen);
 		const moves = [];
-		boardMoves = depth1Chess.moves;
+		boardMoves = Array.from(depth1Chess.moves);
 		console.log(boardMoves)
 		//forEach((move) => {
 		//	console.log(`Move ${move}`);
