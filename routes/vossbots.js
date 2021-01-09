@@ -30,10 +30,10 @@ router.get('/getmove', (req, res) => {
 					}
 				})
 			});
+			if(depth1Chess.turn() === 'b') eval *= -1;
 			moves.push({eval: eval, move: move});
 		})
 		var highest = moves[0];
-		if(depth1Chess.turn() === 'b') eval *= -1;
 		moves.forEach((currentMove) => {
 			console.log(`comapring ${JSON.stringify(currentMove)} to ${JSON.stringify(highest)}`)
 			if(currentMove.eval > highest.eval) highest = currentMove;
