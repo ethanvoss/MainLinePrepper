@@ -14,7 +14,7 @@
 	const board = new Board({width: 400});
 
 	document.addEventListener('boardMove', () => {
-		var fetchUrl = 'http://localhost:3000/vossbot/getmove?fen=';
+		var fetchUrl = 'https://vosstech.herokuapp.com/vossbot/getmove?fen=';
 		fetchUrl += board.getFen();
 		fetch(fetchUrl).then((res) => {
 			return res.text();
