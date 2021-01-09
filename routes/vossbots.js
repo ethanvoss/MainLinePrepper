@@ -3,7 +3,7 @@ const router = express.Router();
 const { Chess } = require('chess.js')
 const chess = new Chess()
 
-router.get('/', checkAuthenticated, (req, res) => {
+router.get('/', (req, res) => {
 	res.render('vossbots/index');
 });
 
@@ -42,6 +42,7 @@ router.get('/getmove', (req, res) => {
 			previousPositions.forEach((previousPosition) => {
 				if(previousPosition.eval * sideMult < worstEval.eval * sideMult) worstEval = previousPosition;
 			})
+			console.log(`pushing move ${move}`);
 			movesWithEval.push({move: move, eval: worstEval.eval});
 		})
 		var sideMult = 1;
