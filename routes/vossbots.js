@@ -33,10 +33,12 @@ router.get('/getmove', (req, res) => {
 
 			moves.push({eval: eval, move: move});
 		})
-		const moveToSend = moves.reduce((highest, currentMove) => {
+		var highest = moves[0];
+		if(depth1Chess.turn() === 'b') eval *= -1;
+		moves.forEach(currentMove) => {
 			if(currentMove.eval > highest.eval) highest = currentMove;
 		})
-		res.send(moveToSend);
+		res.send(highest);
 	} else {
 		res.send('Bee bee boo beep i cant find a move');
 	}	
