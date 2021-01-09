@@ -5,7 +5,7 @@ router.get('/', checkAuthenticated, (req, res) => {
 	res.render('vossbots/index');
 });
 
-router.post('/getmove', (req, res) => {
+router.get('/getmove', (req, res) => {
 	//To do: generate all possible moves for a given depth. => eval moves. => return best move
 
 
