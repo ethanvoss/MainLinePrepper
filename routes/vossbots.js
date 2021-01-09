@@ -13,7 +13,7 @@ router.get('/getmove', (req, res) => {
 
 	if(req.query.fen) {
 		//const depth = req.query.depth || 5;
-		const depth = 5;
+		const depth = 3;
 		var previousPositions = [{fen: req.query.fen}];
 		const depthChess = new Chess();
 		for(var i = 0; i <= depth; i++)
