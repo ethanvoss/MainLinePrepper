@@ -14,14 +14,77 @@
 	const board = new Board({width: 400});
 
 	document.addEventListener('boardMove', () => {
-		var fetchUrl = 'https://vosstech.herokuapp.com/vossbot/getmove?fen=';
-		fetchUrl += board.getFen();
-		fetch(fetchUrl).then((res) => {
-			return res.text();
-		}).then((data) => {
-			console.log(data);
-			board.move(data);
-		});
+		board.move(findMove(board.fen()));
+
+		function findMove(fen) {
+			const depth = 2;
+			const depthChess = new Chess(fen);
+			const moves = depthChess.moves();
+			const movesWithEval = [];
+			const side = depthChess.turn();
+			moves.forEach((move) => {
+				depthChess.load(fen);
+				depthChess.move(move);
+				var previousPositions = [{fen: depthChess.fen()}];
+				for(var i = 1; i <= depth; i++) {
+					var newPositions = [];
+					previousPositions.forEach((position) => {
+						depthChess.load(position.fen);
+						const newMoves = depthChess.moves();
+						newMoves.forEach((newMove) => {
+							depthChess.load(position.fen);
+							depthChess.move(newMove);
+							const eval = evaluateBoard(depthChess.board());
+							newPositions.push({fen: depthChess.fen(), eval: eval});
+						})
+					})
+					previousPositions = newPositions;
+				}
+				var sideMult = 1;
+				if(side === 'b') sideMult *= -1;
+				var worstEval = previousPositions[0];
+				previousPositions.forEach((previousPosition) => {
+					if(previousPosition.eval * sideMult < worstEval.eval * sideMult) worstEval = previousPosition;
+				})
+				console.log(`pushing move ${move}`);
+				movesWithEval.push({move: move, eval: worstEval.eval});
+			})
+			var sideMult = 1;
+			if(side === 'b') sideMult *= -1;
+			var bestMove = movesWithEval[0];
+			movesWithEval.forEach((m) => {
+				if(m.eval * sideMult > bestMove.eval) bestMove = m;
+			})
+			return bestMove.move;
+
+			function evaluateBoard(boardIn) {
+				const values = [{piece: 'k', value: 900},{piece: 'q', value: 90},{piece: 'r', value: 50},{piece: 'b', value: 30},{piece: 'n', value: 30},{piece: 'p', value: 10}];
+				var eval = 0;
+				boardIn.forEach((row) => {
+					row.forEach((piece) => {
+						if(piece !== null) {
+							var pieceValueObj = values.find((value) => { return value.piece === piece.type });
+							var evalAdd = pieceValueObj.value;
+							if(piece.color === 'b') evalAdd *= -1;
+							eval += evalAdd;
+						}
+					})
+				})
+			}
+		return eval;
+	}	
+		}
+
+
+
+		// var fetchUrl = 'https://vosstech.herokuapp.com/vossbot/getmove?fen=';
+		// fetchUrl += board.getFen();
+		// fetch(fetchUrl).then((res) => {
+		// 	return res.text();
+		// }).then((data) => {
+		// 	console.log(data);
+		// 	board.move(data);
+		// });
 	})
 	
 
