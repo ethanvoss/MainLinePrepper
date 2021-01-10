@@ -14,7 +14,9 @@
 	const board = new Board({width: 400});
 
 	document.addEventListener('boardMove', () => {
-		board.move(findMove(board.getFen()));
+		const computerMove = findMove(board.getFen());
+		console.log(computerMove);
+		board.move(computerMove);
 
 		function findMove(fen) {
 			const depthChess = new Chess(fen);
@@ -51,7 +53,7 @@
 
 			})
 
-
+			console.log(pick);
 			return pick.move;
 
 			function evaluateBoard(boardIn) {
