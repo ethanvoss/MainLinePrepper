@@ -40,8 +40,7 @@
 						const depth3move = depth3Moves[j];
 						depthChess.load(depth2fen);
 						depthChess.move(depth3move);
-						const depth3fen = depthChess.fen();
-						const eval = evaluateBoard(depth3fen);
+						const eval = evaluateBoard(depthChess.board());
 
 						if(worst === null) worst = eval;
 						else if(worst * sideMult > eval) worst = eval;
