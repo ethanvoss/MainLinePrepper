@@ -14,7 +14,7 @@
 	const board = new Board({width: 400});
 
 	document.addEventListener('boardMove', () => {
-		board.move(findMove(board.fen()));
+		board.move(findMove(board.getFen()));
 
 		function findMove(fen) {
 			const depth = 2;
