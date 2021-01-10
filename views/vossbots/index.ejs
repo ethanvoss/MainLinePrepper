@@ -17,45 +17,43 @@
 		board.move(findMove(board.getFen()));
 
 		function findMove(fen) {
-			const depth = 2;
 			const depthChess = new Chess(fen);
-			const moves = depthChess.moves();
-			const movesWithEval = [];
-			const side = depthChess.turn();
-			moves.forEach((move) => {
-				depthChess.load(fen);
-				depthChess.move(move);
-				var previousPositions = [{fen: depthChess.fen()}];
-				for(var i = 1; i <= depth; i++) {
-					var newPositions = [];
-					previousPositions.forEach((position) => {
-						depthChess.load(position.fen);
-						const newMoves = depthChess.moves();
-						newMoves.forEach((newMove) => {
-							depthChess.load(position.fen);
-							depthChess.move(newMove);
-							const eval = evaluateBoard(depthChess.board());
-							newPositions.push({fen: depthChess.fen(), eval: eval});
-						})
-					})
-					previousPositions = newPositions;
-				}
-				var sideMult = 1;
-				if(side === 'b') sideMult *= -1;
-				var worstEval = previousPositions[0];
-				previousPositions.forEach((previousPosition) => {
-					if(previousPosition.eval * sideMult < worstEval.eval * sideMult) worstEval = previousPosition;
-				})
-				console.log(`pushing move ${move}`);
-				movesWithEval.push({move: move, eval: worstEval.eval});
-			})
+			var pick = null;
 			var sideMult = 1;
-			if(side === 'b') sideMult *= -1;
-			var bestMove = movesWithEval[0];
-			movesWithEval.forEach((m) => {
-				if(m.eval * sideMult > bestMove.eval) bestMove = m;
+			if(depthChess.turn() === 'b') sideMult = -1;
+			depthChess.moves().forEach((depth1move) => {
+				const movesEndingLeaves = [];
+				var worst = null;
+				depthChess.load(fen);
+				depthChess.move(depth1move);
+				const depth1fen = depthChess.fen();
+
+				const depth2Moves = depthChess.moves();
+				for(var i in depth2Moves) {
+					const depth2move = depth2Moves[i];
+					depthChess.load(depth1fen);
+					depthChess.move(depth2move);
+					const depth2fen = depthChess.fen();
+					
+					const depth3Moves = depthChess.moves();
+					for(var j in depth3Moves) {
+						const depth3move = depth3Moves[j];
+						depthChess.load(depth2fen);
+						depthChess.move(depth3move);
+						const depth3fen = depthChess.fen();
+						const eval = evalAdd(depth3fen);
+
+						if(worst === null) worst = eval;
+						else if(worst * sideMult > eval) worst = eval;
+					}
+				}
+				if(pick === null) pick = depth1move; 
+				else if(pick.eval * sideMult < worst) pick = {eval: worst, move: depth1move};
+
 			})
-			return bestMove.move;
+
+
+			return pick.move;
 
 			function evaluateBoard(boardIn) {
 				const values = [{piece: 'k', value: 900},{piece: 'q', value: 90},{piece: 'r', value: 50},{piece: 'b', value: 30},{piece: 'n', value: 30},{piece: 'p', value: 10}];
