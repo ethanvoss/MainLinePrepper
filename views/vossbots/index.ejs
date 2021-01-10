@@ -45,7 +45,7 @@
 						const eval = evaluateBoard(depthChess.board());
 
 						if(worst === null) worst = eval;
-						else if(worst * sideMult > eval) worst = eval;
+						else if(worst * sideMult > eval * sideMult) worst = eval;
 					}
 				} 
 				if(pick === null || pick.eval * sideMult < worst * sideMult) pick = {eval: worst, move: depth1move};
