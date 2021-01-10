@@ -47,9 +47,8 @@
 						if(worst === null) worst = eval;
 						else if(worst * sideMult > eval) worst = eval;
 					}
-				}
-				if(pick === null) pick = depth1move; 
-				else if(pick.eval * sideMult < worst) pick = {eval: worst, move: depth1move};
+				} 
+				if(pick.eval * sideMult < worst || pick === null) pick = {eval: worst, move: depth1move};
 
 			})
 
