@@ -14,47 +14,74 @@
 	const board = new Board({width: 400});
 
 	document.addEventListener('boardMove', () => {
-		const computerMove = findMove(board.getFen());
+		const computerMove = findMove(board.getFen(), 3);
 		console.log(computerMove);
 		board.move(computerMove);
 
-		function findMove(fen) {
+		function findMove(fen, depth) {
+
 			const depthChess = new Chess(fen);
-			var pick = null;
+
+			const compSide = depthChess.turn();
 			var sideMult = 1;
-			if(depthChess.turn() === 'b') sideMult = -1;
-			depthChess.moves().forEach((depth1move) => {
-				const movesEndingLeaves = [];
-				var worst = null;
+			if(compSide === 'b') sideMult = -1;
+			var pick = null;
+			
+
+
+			const depth0moves = depthChess.moves();
+
+			depth0moves.forEach((move) => {
+				
+				var worstEval = null;
+
+				const positions = [];
+
+				const index0positions = [];
 				depthChess.load(fen);
-				depthChess.move(depth1move);
-				const depth1fen = depthChess.fen();
+				depthChess.move(move);
+				const depth0fen = depthChess.fen();
+				const index0moves = depthChess.moves();
+				index0moves.forEach((index0move) => {
+					const tempChess = new Chess(depth0fen);
+					tempChess.move(index0move);
+					index0positions.push(tempChess.fen());
+				})
+				positions.push(index0positions);
 
-				const depth2Moves = depthChess.moves();
-				for(var i in depth2Moves) {
-					const depth2move = depth2Moves[i];
-					depthChess.load(depth1fen);
-					depthChess.move(depth2move);
-					const depth2fen = depthChess.fen();
-					
-					const depth3Moves = depthChess.moves();
-					for(var j in depth3Moves) {
-						const depth3move = depth3Moves[j];
-						depthChess.load(depth2fen);
-						depthChess.move(depth3move);
-						const eval = evaluateBoard(depthChess.board());
+				for(var d = 0; d < depth; d++) {
+					const currentPositions = positions[d];
+					const newPositions = [];
 
-						if(worst === null) worst = eval;
-						else if(worst * sideMult > eval * sideMult) worst = eval;
-					}
-				} 
-				if(pick === null || pick.eval * sideMult < worst * sideMult) pick = {eval: worst, move: depth1move};
-
+					currentPositions.forEach((position) => {
+						const tempChess = new Chess(position);
+						var eval = null;
+						if(tempChess.in_checkmate() === true && tempChess.turn() === 'w') eval = -9000;
+						else if(tempChess.in_checkmate() === true && tempChess.turn() === 'b') eval = 9000;
+						if(eval !== null) { 
+							if(worstEval === null || eval * sideMult < worstEval * sideMult) worstEval = eval;
+						}
+						else {
+							const moves = tempChess.moves();
+							moves.forEach((move) => {
+								tempChess.load(position);
+								tempChess.move(move);
+								newPositions.push(tempChess.fen());
+							})
+						}
+					})
+					if(newPositions.length > 0) positions.push(newPositions);
+				}
+				const endingLeafs = positions[positions.length - 1];
+				endingLeafs.forEach((leaf) => {
+					const tempChess = new Chess(leaf);
+					const eval = evaluateBoard(tempChess.board());
+					if(worstEval === null || eval * sideMult < worstEval * sideMult) worstEval = eval;
+				})
+				if(pick === null || pick.eval * sideMult < worstEval * sideMult) pick = { move: move, eval: worstEval };
 			})
-
-			console.log(pick);
 			return pick.move;
-
+			
 			function evaluateBoard(boardIn) {
 				const values = [{piece: 'k', value: 900},{piece: 'q', value: 90},{piece: 'r', value: 50},{piece: 'b', value: 30},{piece: 'n', value: 30},{piece: 'p', value: 10}];
 				var eval = 0;
@@ -69,9 +96,9 @@
 					})
 				})
 				return eval;
-			}	
+			}
+			
 		}	
-
 
 
 
