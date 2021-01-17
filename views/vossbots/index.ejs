@@ -59,7 +59,8 @@
 						if(tempChess.in_checkmate() === true && tempChess.turn() === 'w') eval = -9000;
 						else if(tempChess.in_checkmate() === true && tempChess.turn() === 'b') eval = 9000;
 						if(eval !== null) { 
-							if(worstEval === null || eval * sideMult < worstEval * sideMult) worstEval = eval;
+							worstEval = eval;
+							break;
 						}
 						else {
 							const moves = tempChess.moves();
