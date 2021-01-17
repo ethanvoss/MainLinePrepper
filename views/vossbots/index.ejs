@@ -48,29 +48,32 @@
 					index0positions.push(tempChess.fen());
 				})
 				positions.push(index0positions);
-
+				var endLoop = false;
 				for(var d = 0; d < depth; d++) {
 					const currentPositions = positions[d];
 					const newPositions = [];
 
 					currentPositions.forEach((position) => {
-						const tempChess = new Chess(position);
-						var eval = null;
-						if(tempChess.in_checkmate() === true && tempChess.turn() === 'w') eval = -9000;
-						else if(tempChess.in_checkmate() === true && tempChess.turn() === 'b') eval = 9000;
-						if(eval !== null) { 
-							worstEval = eval;
-							break;
-						}
-						else {
-							const moves = tempChess.moves();
-							moves.forEach((move) => {
-								tempChess.load(position);
-								tempChess.move(move);
-								newPositions.push(tempChess.fen());
-							})
+						if(!endLoop) {
+							const tempChess = new Chess(position);
+							var eval = null;
+							if(tempChess.in_checkmate() === true && tempChess.turn() === 'w') eval = -9000;
+							else if(tempChess.in_checkmate() === true && tempChess.turn() === 'b') eval = 9000;
+							if(eval !== null) { 
+								worstEval = eval;
+								endLoop = true;
+							}
+							else {
+								const moves = tempChess.moves();
+								moves.forEach((move) => {
+									tempChess.load(position);
+									tempChess.move(move);
+									newPositions.push(tempChess.fen());
+								})
+							}
 						}
 					})
+					if(endLoop) break;
 					if(newPositions.length > 0) positions.push(newPositions);
 				}
 				const endingLeafs = positions[positions.length - 1];
