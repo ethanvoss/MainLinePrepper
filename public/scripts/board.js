@@ -112,7 +112,6 @@ class Board
 		const styleSheets = Array.from(document.styleSheets);
 
 		styleSheets.forEach((sheet) => {
-			console.log(sheet.href);
 			if(sheet.href == 'https://vosstech.herokuapp.com/public/css/board.css')
 				styleSheet = sheet;
 			if(sheet.href == 'http://vosstech.herokuapp.com/public/css/board.css')
@@ -158,7 +157,6 @@ function genPiece(color, pieceIn, y, x, locked, board)
 function generatePosition(fen)
 {
 	var tempChess = new Chess(fen);
-	console.log(tempChess.board());
 	return tempChess.board();
 }
 function displayPieces(position, locked, board)
@@ -209,12 +207,10 @@ function dragElement(elmnt, board) {
 		e.preventDefault();
 	    // calculate the new cursor position:
 	    if(e.type == "touchmove") {
-	    	console.log(e);
 	    	pos1 = pos3 - e.touches[0].clientX;
 		    pos2 = pos4 - e.touches[0].clientY;
 		    pos3 = e.touches[0].clientX;
 		    pos4 = e.touches[0].clientY;
-		    console.log(e.touches[0]);
 	    } else {
 			pos1 = pos3 - e.clientX;
 		    pos2 = pos4 - e.clientY;
@@ -280,7 +276,6 @@ function dragElement(elmnt, board) {
 		    
 
 			const piece = elmnt.childNodes[0].alt;
-	    	console.log(piece);
 	    	//---Castling---//
 	    	if(piece == 'K')
 	    	{
